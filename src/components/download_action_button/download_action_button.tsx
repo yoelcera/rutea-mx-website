@@ -10,7 +10,7 @@ interface DownloadActionButtonProps {
 
 export function DownloadActionButton({
   href = `https://apps.apple.com/app/id${APP_ID}`,
-  label = "Download",
+  label = "Descargar",
   size = "small",
 }: DownloadActionButtonProps) {
   let appleLogoSize;

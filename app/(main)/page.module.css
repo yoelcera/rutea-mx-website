@@ -1,3 +1,7 @@
 .waitlistSpacer {
   flex-grow: 1;
 }
+.contactForm input::placeholder,
+.contactForm textarea::placeholder {
+  color: #9AA3B2;
+}

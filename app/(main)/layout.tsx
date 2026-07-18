@@ -16,13 +16,13 @@ export const metadata: Metadata = {
    * Recommended length for title is max 60 characters.
    * Recommended length for description is max 160 characters.
    */
-  title: "Website title",
-  description: "Website description",
+  title: "Rutea MX - Transporte público de México",
+  description: "Información oficial y diseño de calidad para tu movilidad urbana.",
 
   /**
    * Your website URL.
    */
-  metadataBase: new URL("https://app-website-url.com"),
+  metadataBase: new URL("https://ruteamx.app"),
 
   /**
    * Info inside `openGraph` and `twitter` is used to show rich previews
@@ -32,9 +32,9 @@ export const metadata: Metadata = {
    * run the dev server and go to `http://localhost:3000/open-graph-builder`.
    */
   openGraph: {
-    title: "App title",
-    description: "App description",
-    url: "https://app-website-url.com",
+    title: "Rutea MX - Transporte público de México",
+    description: "Información oficial y diseño de calidad para tu movilidad urbana.",
+    url: "https://ruteamx.app",
     images: [
       {
         url: "/og-preview.png",
@@ -64,7 +64,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme={THEME}>
+    <html lang="es" data-theme={THEME}>
       <head>
         {/* This makes Safari on iOS show the App Store download banner */}
         {!IS_WAITLIST_ENABLED && (
@@ -81,12 +81,13 @@ export default function RootLayout({
           {!IS_WAITLIST_ENABLED && (
             <Navbar
               icon={<AppIcon src="/app_view/icon_placeholder.png" />}
-              appName="App Name"
+              appName="Rutea MX"
               links={[
-                { label: "Features", href: "#features" },
+                { label: "Funcionalidades", href: "#features" },
                 // Uncomment the line below once you're ready to start using Release Notes
                 // { label: "Release Notes", href: "/release-notes" },
-                { label: "Contact", href: "mailto:your.email@gmail.com" },
+                // { label: "Contáctanos", href: "mailto:xera00@icloud.com" },
+                { label: "Contáctanos", href: "#contact" },
               ]}
               action={<DownloadActionButton />}
             />
@@ -106,22 +107,22 @@ export default function RootLayout({
               />
             }
             links={[
-              { label: "Privacy", href: "/privacy" },
+              { label: "Privacidad", href: "/privacy" },
               {
-                label: "Terms of Use",
+                label: "Términos de uso",
                 href: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/",
                 external: true,
               },
-              {
-                label: "Follow Updates",
-                href: "https://your-social-media.com",
-              },
+              // {
+              //   label: "Follow Updates",
+              //   href: "https://your-social-media.com",
+              // },
             ]}
-            footnoteLeading={`© ${new Date().getFullYear()}. All rights reserved.`}
+            footnoteLeading={`© ${new Date().getFullYear()}. Todos los derechos reservados.`}
             footnoteTrailing={
               // I'd appreciate if you leave this link here, but feel free to remove it, no hard feelings :)
               <>
-                Website is built with{" "}
+                Página web construido con{" "}
                 <a target="_blank" href="https://appview.dev">
                   AppView
                 </a>

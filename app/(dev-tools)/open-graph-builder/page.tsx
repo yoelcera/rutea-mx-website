@@ -15,10 +15,10 @@ export default function OpenGraphBuilderPage() {
 					* Adjust the screenshot crop if needed
 				*/}
         <OpenGraphPreview
-          title="App Title"
+          title="Rutea MX"
           iconSrc="/app_view/icon_placeholder.png"
-          screenshotSrc="/app_view/screenshot_placeholder.png"
-          bezel="iPhone 17 Black"
+          screenshotSrc="/expanded_design.png"
+          bezel="iPhone Air Light Gold"
           bezelCrop={{ edge: "bottom", croppedRatio: 0.35 }}
           theme="light"
         />

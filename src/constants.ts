@@ -15,7 +15,7 @@ export const THEME: "system" | "light" | "dark" = "system";
  *
  * Example: "6502667826"
  */
-export const APP_ID = "1234567890";
+export const APP_ID = "6759586850";
 
 /**
  * Custom fonts for 'whimsical' and 'cursive' font styles.
@@ -28,14 +28,15 @@ export const CURSIVE_FONT = Dancing_Script({ subsets: ["latin"] });
 export const MATERIAL_SYMBOLS = [
   "send",
   "check_circle",
-  "star",
-  "mail",
-  "open_in_new",
   "open_in_full",
+  "open_in_new",
   "play_arrow",
   "pause",
-  "lock",
-  "target",
+  "star",
+  "route",
+  "search",
+  "settings",
+  "bus_map_pin",
 ] as const;
 
 // Neutral

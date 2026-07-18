@@ -10,7 +10,15 @@ interface SectionProps {
 
 export function Section({ title, children, navigationAnchor, paddingTop, paddingBottom }: SectionProps) {
   return (
-    <section className={styles.section} id={navigationAnchor} style={{ paddingTop, paddingBottom }}>
+    <section 
+      className={styles.section}
+      id={navigationAnchor}
+      style={{
+        paddingTop,
+        paddingBottom,
+        scrollMarginTop: navigationAnchor === "contact" ? 120 : 100,
+      }}
+    >
       {title && <h2 className={styles.title}>{title}</h2>}
       {children}
     </section>

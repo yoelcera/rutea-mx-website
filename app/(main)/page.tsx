@@ -6,11 +6,26 @@ import { Hero } from "@/components/hero/hero";
 import { RatingLaurelsBadge } from "@/components/rating_laurels_badge/rating_laurels_badge";
 import { Section } from "@/components/section/section";
 import { TestimonialsGrid } from "@/components/testimonials_grid/testimonials_grid";
+import { ContactForm } from "@/components/contact_form/contact_form";
 import { IS_WAITLIST_ENABLED } from "@/constants";
 
 import styles from "./page.module.css";
 
+const fieldStyle: React.CSSProperties = {
+  width: "100%",
+  padding: "16px 18px",
+  borderRadius: 18,
+  border: "1px solid var(--color-fill-0)",
+  background: "var(--color-fill-0)",
+  color: "var(--color-text-primary)",
+  fontSize: 16,
+  outline: "none",
+  boxSizing: "border-box",
+  transition: "all .2s ease",
+};
+
 export default function Page() {
+
   if (IS_WAITLIST_ENABLED) {
     return (
       <>
@@ -18,13 +33,13 @@ export default function Page() {
 
         <Section paddingTop={60}>
           <Hero
-            title="App Title"
-            subtitle="Short app description that highlights what the app does and its key value"
+            title="Rutea MX"
+            subtitle="Explora México con su transporte público. Conecta con la ciudad."
             media={
               <Hero.Image
-                src="/app_view/screenshot_placeholder.png"
+                src="/hero_section_ss.png"
                 alt=""
-                bezel="iPhone 17 Black"
+                bezel="iPhone Air Light Gold"
               />
             }
             action={
@@ -54,25 +69,25 @@ export default function Page() {
     <>
       <Section paddingTop={100}>
         <Hero
-          title="App Title"
-          subtitle="Short app description that highlights what the app does and its key value"
+          title="Rutea MX"
+          subtitle="Explora México con su transporte público. Conecta con la ciudad."
           media={
             <Hero.Image
-              src="/app_view/screenshot_placeholder.png"
-              bezel="iPhone 17 Black"
+              src="/hero_section_ss.png"
+              bezel="iPhone Air Light Gold"
               alt=""
             />
           }
-          badges={
-            <>
-              <RatingLaurelsBadge
-                showStars={true}
-                rating={4.9}
-                caption="worldwide rating"
-              />
-              <AppleFeatureLaurelsBadge featureName="App of the Day" />
-            </>
-          }
+          // badges={
+          //   <>
+          //     <RatingLaurelsBadge
+          //       showStars={true}
+          //       rating={4.9}
+          //       caption="worldwide rating"
+          //     />
+          //     <AppleFeatureLaurelsBadge featureName="App of the Day" />
+          //   </>
+          // }
           action={<DownloadActionButton size="medium" />}
         />
       </Section>
@@ -81,14 +96,14 @@ export default function Page() {
         <CardGrid rowHeight={438}>
           <CardGrid.StackedCard
             maxWidth="third"
-            title="Feature Title"
-            description="Short feature description"
+            title="Para cualquiera"
+            description="Diseños de menú para todos"
             media={
               <CardGrid.StackedCard.Image
-                src="/app_view/stacked_card_image_placeholder_light.png"
+                src="/design_modes_light.png"
                 srcset={[
                   {
-                    src: "/app_view/stacked_card_image_placeholder_dark.png",
+                    src: "/design_modes_dark.png",
                     theme: "dark",
                   },
                 ]}
@@ -99,60 +114,60 @@ export default function Page() {
             textAlignment="leading"
           />
 
-          <CardGrid.StackedCard
+          {/* <CardGrid.StackedCard
             maxWidth="twoThirds"
-            title="Another Feature Title"
-            description="And another feature description"
+            title="Rutas? Trayectos? Paradas?"
+            description="Nuestro catálogo de rutas tiene todo para facilitar tu movilidad."
             media={
               <CardGrid.StackedCard.Image
-                src="/app_view/screenshot_placeholder.png"
+                src="/hidden_design.png"
                 alt="Make sure to provide an image description for accessibility purposes"
-                bezel="iPhone 17 Black"
+                bezel="iPhone Air Sky Blue"
               />
             }
             textAlignment="leading"
-          />
+          /> */}
 
           <CardGrid.StackedCard
             maxWidth="twoThirds"
-            title="Keep Titles Concise"
-            description="Use the extra space on big cards for longer descriptions"
+            title="Catálogo de rutas"
+            description="Nuestro catálogo de rutas tiene todo para facilitar tu movilidad."
             layoutDirection="reverse"
             media={
               <CardGrid.StackedCard.Image
-                src="/app_view/screenshot_placeholder.png"
+                src="/expanded_design.png"
                 alt="Make sure to provide an image description for accessibility purposes"
-                bezel="iPhone 17 Black"
+                bezel="iPhone Air Sky Blue"
                 bezelCrop={{ edge: "bottom", croppedRatio: 0.25 }}
               />
             }
             textAlignment="leading"
           />
 
-          <CardGrid.OverlaidCard
+          {/* <CardGrid.OverlaidCard
             maxWidth="third"
             imageSrc="/app_view/overlay_image_placeholder_light.png"
             imageSrcset={[
               {
-                src: "/app_view/overlay_image_placeholder_dark.png",
+                src: "/rutas_patron.png",
                 theme: "dark",
               },
             ]}
             title="Feature On An Overlay Card"
             description="These look great with photos or a custom graphics if you're willing to go the extra mile"
             textAlignment="center"
-          />
+          /> */}
 
           <CardGrid.StackedCard
             maxWidth="full"
-            title="Huge Card For a Major Feature"
-            description="Zoomed in UI or a custom graphic look great here"
+            title="Rutas Dinámicas"
+            description="No busques más, selecciona un lugar y rutea te hará un trayecto con las rutas de transporte público necesarias, con ascensos y descensos."
             media={
               <CardGrid.StackedCard.Image
-                src="/app_view/stacked_card_image_placeholder_light.png"
+                src="/dynamic_routes.png"
                 srcset={[
                   {
-                    src: "/app_view/stacked_card_image_placeholder_dark.png",
+                    src: "/dynamic_routes.png",
                     theme: "dark",
                   },
                 ]}
@@ -164,13 +179,13 @@ export default function Page() {
 
           <CardGrid.StackedCard
             maxWidth="half"
-            title="There Are Different Font Styles For Titles"
-            titleFontStyle="cursive"
-            description="When used sparingly, it adds personality and breaks the monotony"
+            title="Tu actividad, en la nube"
+            // titleFontStyle="cursive"
+            description="Sin perder de vista la privacidad"
             media={
               <CardGrid.StackedCard.Image
-                src="/app_view/screenshot_placeholder.png"
-                bezel="iPhone 17 Black"
+                src="/profile_view.png"
+                bezel="iPhone Air Sky Blue"
                 bezelCrop={{ edge: "bottom", croppedRatio: 0.5 }}
                 alt=""
               />
@@ -181,12 +196,12 @@ export default function Page() {
 
           <CardGrid.StackedCard
             maxWidth="half"
-            title="Check AppView Docs For More Guidance"
-            description="There is a section about each card style and how to use it best"
+            title="Buscador y acciones rápidas a tu alcance"
+            description=""
             media={
               <CardGrid.StackedCard.Image
-                src="/app_view/screenshot_placeholder.png"
-                bezel="iPhone 17 Black"
+                src="/compact_design.png"
+                bezel="iPhone Air Space Black"
                 bezelCrop={{ edge: "top", croppedRatio: 0.5 }}
                 alt=""
               />
@@ -197,7 +212,7 @@ export default function Page() {
         </CardGrid>
       </Section>
 
-      <Section title="What people are saying" navigationAnchor="testimonials">
+      {/* <Section title="What people are saying" navigationAnchor="testimonials">
         <TestimonialsGrid maxColumnCount={2}>
           <TestimonialsGrid.Testimonial
             message="Showing social proof is very important. Show some nice words about your app from social media or App Store reviews."
@@ -228,31 +243,123 @@ export default function Page() {
             source="https://x.com/some-thread-message"
           ></TestimonialsGrid.Testimonial>
         </TestimonialsGrid>
-      </Section>
+      </Section> */}
 
-      <Section title="Additional Highlights">
+      <Section title="Características Especiales">
         <CardGrid rowHeight={280}>
           <CardGrid.IconCard
             maxWidth="third"
-            iconName="check_circle"
-            title="Icon Card"
-            description="These are great for listing highlights that don't need images"
+            iconName="settings"
+            title="Altamente Configurable"
+            description="Rutea se pensó desde la experiencia de usuario."
           />
 
           <CardGrid.IconCard
             maxWidth="third"
-            iconName="lock"
-            title="There Are A Ton Of Icons"
-            description="AppView uses Material Symbols for icons with a huge collection to choose from"
+            iconName="search"
+            title="Búsqueda Personalizada"
+            description="Nuestro buscador combina información ciudad - rutas. No solo lugares, filtra lugares por ruta en cada ciudad."
           />
 
           <CardGrid.IconCard
             maxWidth="third"
-            iconName="star"
-            title="Check AppView Docs"
-            description="There are sections about using icons and icon cards"
+            iconName="bus_map_pin"
+            title="Transporte Público"
+            description="Rutea MX está lista para gestionar rastreo de vehiculos. Espéralo muy pronto."
           />
         </CardGrid>
+      </Section>
+
+      <Section 
+        title="¿Dudas, sugerencias o quejas? ¡Contáctanos!"
+        navigationAnchor="contact"
+        paddingTop={0}
+      >
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1.2fr",
+            gap: 18,
+            alignItems: "stretch",
+            marginTop: -30,
+          }}
+        >
+          {/* Lado izquierdo */}
+          <div
+          style={{
+            padding: 40,
+            paddingTop: 34, // ajusta este valor
+            borderRadius: 36,
+            background: "var(--color-background-secondary)",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+            <span
+              style={{
+                color: "var(--color-accent-brand)",
+                fontWeight: 600,
+                marginBottom: 12,
+              }}
+            >
+              Rutea MX
+            </span>
+
+            <h2
+              style={{
+                margin: 0,
+                fontSize: 40,
+                lineHeight: 1.05,
+                letterSpacing: "-0.04em",
+              }}
+            >
+              Estamos para escucharte.
+            </h2>
+
+            <p
+              style={{
+                marginTop: 10,
+                color: "var(--color-text-secondary)",
+                lineHeight: 1.6,
+              }}
+            >
+              Si tienes dudas, sugerencias, quieres reportar algún problema
+              o colaborar con el proyecto, estaremos encantados de leerte.
+            </p>
+
+            <div
+              style={{
+                marginTop: "20px",
+                display: "grid",
+                gap: 18,
+              }}
+            >
+              <div>
+                <strong>Correo</strong>
+                <br />
+                xera00@icloud.com
+              </div>
+
+              <div>
+                <strong>Teléfono</strong>
+                <br />
+                +52 (646) 272-1753
+              </div>
+
+              <div>
+                <strong>Dirección</strong>
+                <br />
+                Calle Gardenias #118, Lomas de Valle Verde
+                <br />
+                Ensenada, Baja California
+              </div>
+            </div>
+          </div>
+
+          {/* Formulario */}
+
+          <ContactForm />
+        </div>
       </Section>
 
       <Section paddingTop={60} paddingBottom={160}>
