@@ -2,31 +2,33 @@
 
 import { useEffect, useState } from "react";
 
-let scriptLoadingPromise: Promise<void> | null = null;
+let loadPromise: Promise<void> | null = null;
 
-function loadGoogleMapsScript(apiKey: string): Promise<void> {
+function loadGoogleMaps(apiKey: string): Promise<void> {
   if (typeof window === "undefined") {
     return Promise.resolve();
   }
 
-  if (window.google?.maps) {
+  if (window.google?.maps?.importLibrary) {
     return Promise.resolve();
   }
 
-  if (scriptLoadingPromise) {
-    return scriptLoadingPromise;
+  if (loadPromise) {
+    return loadPromise;
   }
 
-  scriptLoadingPromise = new Promise((resolve, reject) => {
+  loadPromise = new Promise((resolve, reject) => {
+    const callbackName = "__googleMapsCallback__";
+    (window as unknown as Record<string, () => void>)[callbackName] = () => resolve();
+
     const script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=marker&v=weekly&loading=async`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=marker&v=weekly&callback=${callbackName}`;
     script.async = true;
-    script.onload = () => resolve();
     script.onerror = () => reject(new Error("No se pudo cargar Google Maps."));
     document.head.appendChild(script);
   });
 
-  return scriptLoadingPromise;
+  return loadPromise;
 }
 
 export function useGoogleMapsScript(apiKey: string) {
@@ -41,7 +43,7 @@ export function useGoogleMapsScript(apiKey: string) {
 
     let isMounted = true;
 
-    loadGoogleMapsScript(apiKey)
+    loadGoogleMaps(apiKey)
       .then(() => {
         if (isMounted) setIsLoaded(true);
       })

@@ -1,0 +1,162 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  --color-base-background: var(--color-fill-0);
+
+  background-color: color-mix(in srgb, var(--color-base-background) 50%, transparent);
+  border-radius: 35px;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--color-fill-0);
+  box-shadow: inset 0 0 25px var(--color-fill-0), 0 10px 40px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@supports (corner-shape: squircle) {
+  .card {
+    border-radius: 60px;
+    corner-shape: squircle;
+  }
+}
+
+@container root style(--color-scheme: dark) {
+  .card {
+    --color-base-background: var(--color-fill-2);
+
+    background-color: color-mix(in srgb, var(--color-base-background) 70%, transparent);
+    border: 1px solid var(--color-fill-3);
+    box-shadow: inset 0 0 25px var(--color-fill-2), 0 10px 40px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  background-color: var(--color-fill-1);
+  border-radius: 999px;
+  padding: 4px;
+}
+
+.tab,
+.tabActive {
+  flex: 1;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+.tabActive {
+  background-color: var(--color-fill-0);
+  color: var(--color-text-primary);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--color-fill-3);
+  background-color: var(--color-fill-0);
+  color: var(--color-text-primary);
+  font-size: 15px;
+}
+
+.input:focus {
+  outline: 2px solid var(--color-accent-brand);
+  outline-offset: -1px;
+}
+
+.empresaGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.empresaLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.empresaOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.empresaButton,
+.empresaButtonActive {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--color-fill-3);
+  background-color: var(--color-fill-0);
+  color: var(--color-text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.empresaButtonActive {
+  background-color: var(--color-accent-brand);
+  color: var(--color-text-accent-brand);
+  border-color: var(--color-accent-brand);
+}
+
+.error {
+  font-size: 13px;
+  color: var(--color-accent-red);
+}
+
+.submitButton {
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 999px;
+  border: none;
+  background-color: var(--color-accent-brand);
+  color: var(--color-text-accent-brand);
+  font-size: 16px;
+  font-weight: 600;
+  transition: opacity 0.1s ease-in-out;
+}
+
+.submitButton:hover {
+  opacity: 0.7;
+}
+
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pendingMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  padding: 10px 0;
+}

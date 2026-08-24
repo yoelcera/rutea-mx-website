@@ -1,0 +1,98 @@
+.gate {
+  width: 100%;
+  padding: 0 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.loginButton {
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: none;
+  background-color: var(--color-accent-brand);
+  color: var(--color-text-accent-brand);
+  font-size: 16px;
+  font-weight: 500;
+  transition: opacity 0.1s ease-in-out;
+}
+
+.loginButton:hover {
+  opacity: 0.7;
+}
+
+.messageBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.message {
+  font-size: 16px;
+  color: var(--color-text-secondary);
+}
+
+.deniedMessage {
+  font-size: 16px;
+  color: var(--color-accent-red);
+}
+
+.busRoster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.busChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border: 1px solid var(--color-fill-3);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  background-color: var(--color-fill-1);
+  color: var(--color-text-secondary);
+  opacity: 0.85;
+  transition: opacity 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.busChip:hover {
+  opacity: 1;
+}
+
+.busChipSelected {
+  box-shadow: 0 0 0 2px var(--color-text-primary);
+}
+
+.busDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  padding: 16px;
+  border: 1px solid var(--color-fill-3);
+  border-radius: 16px;
+  background-color: var(--color-fill-1);
+}
+
+.busDetailRow {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.busDetailRow strong {
+  color: var(--color-text-primary);
+}
+
+.signOutButton {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--color-fill-3);
+  background-color: transparent;
+  color: var(--color-text-primary);
+  font-size: 14px;
+  font-weight: 500;
+}

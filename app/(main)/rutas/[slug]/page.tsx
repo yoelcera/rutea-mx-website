@@ -52,6 +52,10 @@ export default async function RoutePage({
           color={ROUTE_COLOR_HEX[route.color]}
           stopIconSrc={ROUTE_STOP_ICON[route.color]}
         />
+
+        <p className={styles.subtitle}>
+          Para más información acerca de las rutas, descarga nuestra app en tu celular.
+        </p>
       </div>
     </Section>
   );

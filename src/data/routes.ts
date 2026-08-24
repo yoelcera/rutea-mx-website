@@ -205,6 +205,26 @@ export function getOperatorBySlug(slug: string): TransitOperator | undefined {
   return TRANSIT_OPERATORS.find((operator) => operator.slug === slug);
 }
 
+/**
+ * The "empresa" field used in Firestore (buses/admins collections) doesn't
+ * always match our operatorSlug values 1:1 (e.g. "violeta" -> "violetas").
+ * This table keeps the single source of truth for that translation.
+ */
+export const OPERATOR_EMPRESA: Record<string, string> = {
+  violeta: "violetas",
+  rojos: "rojos",
+  amarillos: "amarillos",
+  vigia: "vigia",
+};
+
+export function getEmpresaByOperatorSlug(slug: string): string {
+  return OPERATOR_EMPRESA[slug] ?? slug;
+}
+
+export function getOperatorSlugByEmpresa(empresa: string): string | undefined {
+  return Object.entries(OPERATOR_EMPRESA).find(([, value]) => value === empresa)?.[0];
+}
+
 export function getRoutesByOperator(operatorSlug: string): TransitRoute[] {
   return TRANSIT_ROUTES.filter((route) => route.operatorSlug === operatorSlug);
 }

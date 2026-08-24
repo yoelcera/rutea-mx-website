@@ -108,6 +108,7 @@ export default function RootLayout({
               />
             }
             links={[
+              { label: "Administrador", href: "/admin" },
               { label: "Privacidad", href: "/privacy" },
               {
                 label: "Términos de uso",

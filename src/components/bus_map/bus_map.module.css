@@ -1,0 +1,45 @@
+.map {
+  width: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.placeholder {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 24px;
+  background: var(--color-fill-1);
+  color: var(--color-text-secondary);
+  text-align: center;
+  padding: 20px;
+}
+
+.busPin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transform: translateY(6px);
+}
+
+.busDot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: var(--color-accent-brand);
+  border: 2px solid var(--color-fill-0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.busLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  background-color: color-mix(in srgb, var(--color-fill-0) 85%, transparent);
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}

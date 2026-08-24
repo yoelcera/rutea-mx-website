@@ -9,6 +9,8 @@ import styles from "./route_map.module.css";
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "";
 const MAP_ID_LIGHT = process.env.NEXT_PUBLIC_GOOGLE_MAP_ID_LIGHT ?? "";
 const MAP_ID_DARK = process.env.NEXT_PUBLIC_GOOGLE_MAP_ID_DARK ?? "";
+/** Temporarily off per product decision — keep the marker code intact for when it's re-enabled. */
+const SHOW_STOP_MARKERS = false;
 
 interface RouteMapProps {
   path: LatLngLiteral[];
@@ -78,20 +80,22 @@ export function RouteMap({
         });
       }
 
-      stops.forEach((stop, index) => {
-        const icon = document.createElement("img");
-        icon.src = stopIconSrc;
-        icon.alt = `Parada ${index + 1}`;
-        icon.style.width = "36px";
-        icon.style.height = "36px";
+      if (SHOW_STOP_MARKERS) {
+        stops.forEach((stop, index) => {
+          const icon = document.createElement("img");
+          icon.src = stopIconSrc;
+          icon.alt = `Parada ${index + 1}`;
+          icon.style.width = "36px";
+          icon.style.height = "36px";
 
-        new AdvancedMarkerElement({
-          map,
-          position: { lat: stop.lat, lng: stop.lng },
-          title: `Parada ${index + 1}`,
-          content: icon,
+          new AdvancedMarkerElement({
+            map,
+            position: { lat: stop.lat, lng: stop.lng },
+            title: `Parada ${index + 1}`,
+            content: icon,
+          });
         });
-      });
+      }
 
       const recenterButton = document.createElement("button");
       recenterButton.type = "button";
