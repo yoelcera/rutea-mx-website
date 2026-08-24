@@ -98,7 +98,7 @@ export const TRANSIT_OPERATORS: TransitOperator[] = [
   },
   {
     slug: "vigia",
-    name: "Vigías",
+    name: "Vigía",
     city: "ensenada",
     terminalLocation: null,
     firstDeparture: null,
