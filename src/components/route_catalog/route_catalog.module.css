@@ -1,0 +1,58 @@
+.catalog {
+  width: 100%;
+  max-width: var(--base-width);
+  padding: 0 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.citySection {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.cityTitle {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.operatorSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.operatorTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+}
+
+.routeList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.routeButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 500;
+  transition: transform 0.15s ease-in-out, opacity 0.1s ease-in-out;
+}
+
+.routeButton:hover {
+  opacity: 0.85;
+  transform: scale(1.03);
+}
+
+.routeButton:active {
+  transform: scale(0.97);
+}

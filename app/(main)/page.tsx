@@ -4,6 +4,7 @@ import { DownloadActionButton } from "@/components/download_action_button/downlo
 import { EmailForm } from "@/components/email_form/email_form";
 import { Hero } from "@/components/hero/hero";
 import { RatingLaurelsBadge } from "@/components/rating_laurels_badge/rating_laurels_badge";
+import { RouteCatalog } from "@/components/route_catalog/route_catalog";
 import { Section } from "@/components/section/section";
 import { TestimonialsGrid } from "@/components/testimonials_grid/testimonials_grid";
 import { ContactForm } from "@/components/contact_form/contact_form";
@@ -270,10 +271,15 @@ export default function Page() {
         </CardGrid>
       </Section>
 
-      <Section 
+      <Section title="Rutas Disponibles" navigationAnchor="routes">
+        <RouteCatalog />
+      </Section>
+
+      <Section
         title="¿Dudas, sugerencias o quejas? ¡Contáctanos!"
         navigationAnchor="contact"
         paddingTop={0}
+        paddingBottom={0}
       >
         <div
           style={{
@@ -362,7 +368,7 @@ export default function Page() {
         </div>
       </Section>
 
-      <Section paddingTop={60} paddingBottom={160}>
+      <Section paddingTop={0} paddingBottom={160}>
         <DownloadActionButton
           size="medium"
         />

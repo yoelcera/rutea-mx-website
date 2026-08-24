@@ -37,6 +37,7 @@ export const MATERIAL_SYMBOLS = [
   "search",
   "settings",
   "bus_map_pin",
+  "my_location",
 ] as const;
 
 // Neutral

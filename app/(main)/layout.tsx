@@ -84,6 +84,7 @@ export default function RootLayout({
               appName="Rutea MX"
               links={[
                 { label: "Funcionalidades", href: "#features" },
+                { label: "Rutas", href: "#routes" },
                 // Uncomment the line below once you're ready to start using Release Notes
                 // { label: "Release Notes", href: "/release-notes" },
                 // { label: "Contáctanos", href: "mailto:xera00@icloud.com" },
