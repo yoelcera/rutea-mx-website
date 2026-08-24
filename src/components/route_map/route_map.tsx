@@ -41,6 +41,7 @@ export function RouteMap({
     }
 
     let isCancelled = false;
+    let watchId: number | null = null;
 
     (async () => {
       const mapsLibrary = (await google.maps.importLibrary("maps")) as google.maps.MapsLibrary;
@@ -113,10 +114,48 @@ export function RouteMap({
       });
 
       map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(recenterButton);
+
+      if (navigator.geolocation) {
+        let userMarker: google.maps.marker.AdvancedMarkerElement | null = null;
+
+        watchId = navigator.geolocation.watchPosition(
+          (position) => {
+            if (isCancelled) return;
+
+            const userPosition = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            };
+
+            if (userMarker) {
+              userMarker.position = userPosition;
+              return;
+            }
+
+            const dot = document.createElement("div");
+            dot.className = styles.userLocationDot;
+
+            userMarker = new AdvancedMarkerElement({
+              map,
+              position: userPosition,
+              title: "Tu ubicación",
+              content: dot,
+              zIndex: 999,
+            });
+          },
+          (geoError) => {
+            console.warn("[RouteMap] geolocation error:", geoError.message);
+          },
+          { enableHighAccuracy: true, maximumAge: 10000, timeout: 15000 },
+        );
+      }
     })();
 
     return () => {
       isCancelled = true;
+      if (watchId !== null && navigator.geolocation) {
+        navigator.geolocation.clearWatch(watchId);
+      }
     };
   }, [isLoaded, path, stops, color, mapId, hasPath, hasStops, stopIconSrc]);
 
