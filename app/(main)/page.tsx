@@ -89,7 +89,12 @@ export default function Page() {
           //     <AppleFeatureLaurelsBadge featureName="App of the Day" />
           //   </>
           // }
-          action={<DownloadActionButton size="medium" />}
+          action={
+            <div style={{ display: "flex", gap: 12 }}>
+              <DownloadActionButton size="medium" platform="ios" />
+              <DownloadActionButton size="medium" platform="android" />
+            </div>
+          }
         />
       </Section>
 
@@ -369,9 +374,10 @@ export default function Page() {
       </Section>
 
       <Section paddingTop={0} paddingBottom={160}>
-        <DownloadActionButton
-          size="medium"
-        />
+        <div style={{ display: "flex", gap: 12 }}>
+          <DownloadActionButton size="medium" platform="ios" />
+          <DownloadActionButton size="medium" platform="android" />
+        </div>
       </Section>
     </>
   );

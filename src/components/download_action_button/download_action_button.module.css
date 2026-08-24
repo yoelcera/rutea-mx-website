@@ -30,6 +30,16 @@
     top: -1px;
   }
 
+  .androidLogo {
+    position: relative;
+    top: -1px;
+
+    svg,
+    path {
+      fill: currentColor;
+    }
+  }
+
   .downloadLabel {
     font-weight: 500;
   }
@@ -67,6 +77,14 @@
 
     .downloadLabel {
       font-size: 22px;
+    }
+  }
+
+  &.iconOnly {
+    padding: 10px;
+
+    .label {
+      left: 0;
     }
   }
 }

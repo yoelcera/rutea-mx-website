@@ -90,7 +90,12 @@ export default function RootLayout({
                 // { label: "Contáctanos", href: "mailto:xera00@icloud.com" },
                 { label: "Contáctanos", href: "#contact" },
               ]}
-              action={<DownloadActionButton />}
+              action={
+                <div style={{ display: "flex", gap: 8 }}>
+                  <DownloadActionButton platform="ios" showLabel={false} />
+                  <DownloadActionButton platform="android" showLabel={false} />
+                </div>
+              }
             />
           )}
 
