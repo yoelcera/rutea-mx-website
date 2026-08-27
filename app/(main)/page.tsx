@@ -7,7 +7,6 @@ import { RatingLaurelsBadge } from "@/components/rating_laurels_badge/rating_lau
 import { RouteCatalog } from "@/components/route_catalog/route_catalog";
 import { Section } from "@/components/section/section";
 import { TestimonialsGrid } from "@/components/testimonials_grid/testimonials_grid";
-import { ContactForm } from "@/components/contact_form/contact_form";
 import { IS_WAITLIST_ENABLED } from "@/constants";
 
 import styles from "./page.module.css";
@@ -278,99 +277,6 @@ export default function Page() {
 
       <Section title="Rutas Disponibles" navigationAnchor="routes">
         <RouteCatalog />
-      </Section>
-
-      <Section
-        title="¿Dudas, sugerencias o quejas? ¡Contáctanos!"
-        navigationAnchor="contact"
-        paddingTop={0}
-        paddingBottom={0}
-      >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1.2fr",
-            gap: 18,
-            alignItems: "stretch",
-            marginTop: -30,
-          }}
-        >
-          {/* Lado izquierdo */}
-          <div
-          style={{
-            padding: 40,
-            paddingTop: 34, // ajusta este valor
-            borderRadius: 36,
-            background: "var(--color-background-secondary)",
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-            <span
-              style={{
-                color: "var(--color-accent-brand)",
-                fontWeight: 600,
-                marginBottom: 12,
-              }}
-            >
-              Rutea MX
-            </span>
-
-            <h2
-              style={{
-                margin: 0,
-                fontSize: 40,
-                lineHeight: 1.05,
-                letterSpacing: "-0.04em",
-              }}
-            >
-              Estamos para escucharte.
-            </h2>
-
-            <p
-              style={{
-                marginTop: 10,
-                color: "var(--color-text-secondary)",
-                lineHeight: 1.6,
-              }}
-            >
-              Si tienes dudas, sugerencias, quieres reportar algún problema
-              o colaborar con el proyecto, estaremos encantados de leerte.
-            </p>
-
-            <div
-              style={{
-                marginTop: "20px",
-                display: "grid",
-                gap: 18,
-              }}
-            >
-              <div>
-                <strong>Correo</strong>
-                <br />
-                xera00@icloud.com
-              </div>
-
-              <div>
-                <strong>Teléfono</strong>
-                <br />
-                +52 (646) 272-1753
-              </div>
-
-              <div>
-                <strong>Dirección</strong>
-                <br />
-                Calle Gardenias #118, Lomas de Valle Verde
-                <br />
-                Ensenada, Baja California
-              </div>
-            </div>
-          </div>
-
-          {/* Formulario */}
-
-          <ContactForm />
-        </div>
       </Section>
 
       <Section paddingTop={0} paddingBottom={160}>

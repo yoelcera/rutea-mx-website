@@ -1,0 +1,12 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 18px;
+  align-items: stretch;
+}
+
+@container root (width < 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

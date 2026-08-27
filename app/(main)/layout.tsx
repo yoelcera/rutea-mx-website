@@ -87,8 +87,6 @@ export default function RootLayout({
                 { label: "Rutas", href: "#routes" },
                 // Uncomment the line below once you're ready to start using Release Notes
                 // { label: "Release Notes", href: "/release-notes" },
-                // { label: "Contáctanos", href: "mailto:xera00@icloud.com" },
-                { label: "Contáctanos", href: "#contact" },
               ]}
               action={
                 <div style={{ display: "flex", gap: 8 }}>
@@ -115,6 +113,7 @@ export default function RootLayout({
             links={[
               { label: "Administrador", href: "/admin" },
               { label: "Privacidad", href: "/privacy" },
+              { label: "Contáctanos", href: "/contact" },
               {
                 label: "Términos de uso",
                 href: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/",
