@@ -6,7 +6,7 @@ export default function ContactPage() {
     <>
       <h1
         style={{
-          margin: "2rem 0 24px",
+          margin: "0 0 24px",
           fontSize: "clamp(24px, 3vw, 37.5px)",
           lineHeight: 1.1,
           letterSpacing: "-0.02em",

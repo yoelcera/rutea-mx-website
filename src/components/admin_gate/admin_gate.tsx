@@ -10,7 +10,7 @@ import {
   ROUTE_COLOR_HEX,
   ROUTE_COLOR_TEXT,
 } from "@/data/routes";
-import { AdminAuthProvider, useAdminAuth } from "@/hooks/use_admin_auth";
+import { useAdminAuth } from "@/hooks/use_admin_auth";
 import { isBusActive, useLiveBuses } from "@/hooks/use_live_buses";
 import { isFirebaseConfigured } from "@/lib/firebase";
 import styles from "./admin_gate.module.css";
@@ -18,7 +18,21 @@ import styles from "./admin_gate.module.css";
 const DEFAULT_CHIP_COLOR = "#000000";
 const DEFAULT_CHIP_TEXT_COLOR = "#FFFFFF";
 
-function AdminGateContent() {
+export function AdminGateContent() {
+  if (!isFirebaseConfigured) {
+    return (
+      <div className={styles.gate}>
+        <p className={styles.message}>
+          Configura las variables NEXT_PUBLIC_FIREBASE_* en .env.local para habilitar el acceso.
+        </p>
+      </div>
+    );
+  }
+
+  return <AdminGateInner />;
+}
+
+function AdminGateInner() {
   const { user, nombre, empresa, status, loading, signOut } = useAdminAuth();
   const [showModal, setShowModal] = useState(false);
   const [selectedBusId, setSelectedBusId] = useState<string | null>(null);
@@ -141,23 +155,5 @@ function AdminGateContent() {
         Cerrar sesión
       </button>
     </div>
-  );
-}
-
-export function AdminGate() {
-  if (!isFirebaseConfigured) {
-    return (
-      <div className={styles.gate}>
-        <p className={styles.message}>
-          Configura las variables NEXT_PUBLIC_FIREBASE_* en .env.local para habilitar el acceso.
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <AdminAuthProvider>
-      <AdminGateContent />
-    </AdminAuthProvider>
   );
 }

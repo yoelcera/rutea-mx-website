@@ -23,6 +23,12 @@
   margin-bottom: 32px;
 }
 
+.buttonRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .title {
   font-size: 34px;
   line-height: 1.2;
