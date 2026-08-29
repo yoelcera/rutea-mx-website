@@ -76,12 +76,14 @@ function AdminGateContent() {
 
   return (
     <div className={`${styles.gate} ${styles.messageBlock}`}>
-      <p className={styles.message}>
-        Bienvenido{firstName ? `, ${firstName}` : ""}.
-      </p>
-      <p className={styles.message}>Empresa: {operator?.name ?? empresa}</p>
-      <p className={styles.message}>Pasajeros totales: {totalPassengers}</p>
-      <p className={styles.message}>Buses</p>
+      <div className={styles.statsRow}>
+        <p className={styles.message}>
+          Bienvenido{firstName ? `, ${firstName}` : ""}.
+        </p>
+        <p className={styles.message}>Empresa: {operator?.name ?? empresa}</p>
+        <p className={styles.message}>Pasajeros totales: {totalPassengers}</p>
+      </div>
+      <p className={styles.message}>Buses:</p>
       <div className={styles.busRoster}>
         {buses.map((bus) => (
           <button

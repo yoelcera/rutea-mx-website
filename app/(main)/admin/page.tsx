@@ -1,5 +1,5 @@
 import { AdminGate } from "@/components/admin_gate/admin_gate";
-import { Section } from "@/components/section/section";
+import { AdminWidthToggle } from "./admin_width_toggle";
 
 export const metadata = {
   title: "Administrador",
@@ -8,8 +8,8 @@ export const metadata = {
 
 export default function AdminPage() {
   return (
-    <Section title="Panel de Administrador">
+    <AdminWidthToggle>
       <AdminGate />
-    </Section>
+    </AdminWidthToggle>
   );
 }
