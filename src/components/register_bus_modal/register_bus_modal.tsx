@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { GeoPoint, collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { getOperatorSlugByEmpresa, getRoutesByOperator } from "@/data/routes";
 import { db } from "@/lib/firebase";
 import styles from "./register_bus_modal.module.css";
@@ -32,13 +32,20 @@ export function RegisterBusModal({ empresa, onClose }: RegisterBusModalProps) {
 
     setLoading(true);
     try {
-      await addDoc(collection(db, "buses"), {
+      const busRef = doc(collection(db, "buses"));
+      await setDoc(busRef, {
+        bus_id: busRef.id,
+        driver_id: "",
+        driver_name: "",
+        driver_location: new GeoPoint(0, 0),
         empresa,
-        unidad,
+        passengers_count: 0,
         plate,
         route_id: routeId,
-        passengers_count: 0,
-        driver_location: null,
+        unidad,
+        status: "pending",
+        qr_generated: true,
+        created_at: serverTimestamp(),
         updated_at: serverTimestamp(),
       });
       onClose();

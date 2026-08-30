@@ -17,6 +17,7 @@ export interface LiveBus {
   plate: string;
   passengersCount: number;
   updatedAt: Date | null;
+  qrGenerated: boolean;
 }
 
 /** A bus counts as "active" when it has a fresh location fix. */
@@ -35,7 +36,11 @@ export function useLiveBuses(empresa: string | null) {
       return;
     }
 
-    const busesQuery = query(collection(db, "buses"), where("empresa", "==", empresa));
+    const busesQuery = query(
+      collection(db, "buses"),
+      where("empresa", "==", empresa),
+      where("status", "==", "approved")
+    );
 
     const unsubscribe = onSnapshot(busesQuery, (snapshot) => {
       const allBuses: LiveBus[] = [];
@@ -56,6 +61,7 @@ export function useLiveBuses(empresa: string | null) {
           plate: (data.plate as string) ?? "",
           passengersCount: (data.passengers_count as number) ?? 0,
           updatedAt,
+          qrGenerated: (data.qr_generated as boolean) ?? false,
         });
       });
 

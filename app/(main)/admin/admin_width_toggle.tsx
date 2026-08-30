@@ -8,7 +8,7 @@ import styles from "./admin_width_toggle.module.css";
 export function AdminWidthToggle({ children }: { children: React.ReactNode }) {
   const [isWide, setIsWide] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const { empresa } = useAdminAuth();
+  const { status, empresa, signOut } = useAdminAuth();
 
   return (
     <div className={styles.outer}>
@@ -16,21 +16,35 @@ export function AdminWidthToggle({ children }: { children: React.ReactNode }) {
         <div className={styles.header}>
           <h2 className={styles.title}>Panel de Administrador</h2>
           <div className={styles.buttonRow}>
-            <button
-              type="button"
-              className={styles.toggleButton}
-              onClick={() => setIsWide((prev) => !prev)}
-            >
-              {isWide ? "Reducir ancho" : "Expandir ancho"}
-            </button>
+            {status === "approved" && (
+              <button
+                type="button"
+                className={styles.toggleButton}
+                onClick={signOut}
+              >
+                Cerrar sesión
+              </button>
+            )}
 
-            <button
-              type="button"
-              className={styles.toggleButton}
-              onClick={() => setShowRegisterModal(true)}
-            >
-              Registrar unidad
-            </button>
+            {status === "approved" && (
+              <button
+                type="button"
+                className={styles.toggleButton}
+                onClick={() => setIsWide((prev) => !prev)}
+              >
+                {isWide ? "Reducir ancho" : "Expandir ancho"}
+              </button>
+            )}
+
+            {status === "approved" && (
+              <button
+                type="button"
+                className={styles.toggleButton}
+                onClick={() => setShowRegisterModal(true)}
+              >
+                Registrar unidad
+              </button>
+            )}
           </div>
         </div>
 

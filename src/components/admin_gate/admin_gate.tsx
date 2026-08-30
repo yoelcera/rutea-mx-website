@@ -10,6 +10,7 @@ import {
   ROUTE_COLOR_HEX,
   ROUTE_COLOR_TEXT,
 } from "@/data/routes";
+import { BusQrPanel } from "@/components/bus_qr_panel/bus_qr_panel";
 import { useAdminAuth } from "@/hooks/use_admin_auth";
 import { isBusActive, useLiveBuses } from "@/hooks/use_live_buses";
 import { isFirebaseConfigured } from "@/lib/firebase";
@@ -97,8 +98,9 @@ function AdminGateInner() {
         <p className={styles.message}>Empresa: {operator?.name ?? empresa}</p>
         <p className={styles.message}>Pasajeros totales: {totalPassengers}</p>
       </div>
-      <p className={styles.message}>Buses:</p>
-      <div className={styles.busRoster}>
+      <div className={styles.busRosterRow}>
+        <p className={styles.message}>Buses:</p>
+        <div className={styles.busRoster}>
         {buses.map((bus) => (
           <button
             key={bus.id}
@@ -120,40 +122,46 @@ function AdminGateInner() {
             {bus.unidad}
           </button>
         ))}
+        </div>
       </div>
       {selectedBus && (
         <div className={styles.busDetails}>
-          <p className={styles.busDetailRow}>
-            <strong>Bus ID:</strong> {selectedBus.busId}
-          </p>
-          <p className={styles.busDetailRow}>
-            <strong>Placas:</strong> {selectedBus.plate}
-          </p>
-          <p className={styles.busDetailRow}>
-            <strong>Conductor:</strong> {selectedBus.driverName}
-          </p>
-          <p className={styles.busDetailRow}>
-            <strong>Ubicación:</strong>{" "}
-            {selectedBus.lat !== null && selectedBus.lng !== null
-              ? `${selectedBus.lat.toFixed(5)}, ${selectedBus.lng.toFixed(5)}`
-              : "—"}
-          </p>
-          <p className={styles.busDetailRow}>
-            <strong>Actualizado:</strong>{" "}
-            {selectedBus.updatedAt ? selectedBus.updatedAt.toLocaleString("es-MX") : "—"}
-          </p>
-          <p className={styles.busDetailRow}>
-            <strong>Ruta ID:</strong> {selectedBus.routeId}
-          </p>
-          <p className={styles.busDetailRow}>
-            <strong>Pasajeros:</strong> {selectedBus.passengersCount}
-          </p>
+          <div className={styles.busDetailsInfo}>
+            <p className={styles.busDetailRow}>
+              <strong>Bus ID:</strong> {selectedBus.busId}
+            </p>
+            <p className={styles.busDetailRow}>
+              <strong>Placas:</strong> {selectedBus.plate}
+            </p>
+            <p className={styles.busDetailRow}>
+              <strong>Conductor:</strong> {selectedBus.driverName}
+            </p>
+            <p className={styles.busDetailRow}>
+              <strong>Ubicación:</strong>{" "}
+              {selectedBus.lat !== null && selectedBus.lng !== null
+                ? `${selectedBus.lat.toFixed(5)}, ${selectedBus.lng.toFixed(5)}`
+                : "—"}
+            </p>
+            <p className={styles.busDetailRow}>
+              <strong>Actualizado:</strong>{" "}
+              {selectedBus.updatedAt ? selectedBus.updatedAt.toLocaleString("es-MX") : "—"}
+            </p>
+            <p className={styles.busDetailRow}>
+              <strong>Ruta ID:</strong> {selectedBus.routeId}
+            </p>
+            <p className={styles.busDetailRow}>
+              <strong>Pasajeros:</strong> {selectedBus.passengersCount}
+            </p>
+          </div>
+
+          <BusQrPanel
+            busDocId={selectedBus.id}
+            busId={selectedBus.busId}
+            qrGenerated={selectedBus.qrGenerated}
+          />
         </div>
       )}
       {empresa && <BusMap empresa={empresa} buses={buses} />}
-      <button type="button" className={styles.signOutButton} onClick={signOut}>
-        Cerrar sesión
-      </button>
     </div>
   );
 }

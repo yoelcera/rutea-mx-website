@@ -1,0 +1,67 @@
+.side {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  flex-shrink: 0;
+  width: 120px;
+  gap: 12px;
+}
+
+.actionButton {
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--color-fill-3);
+  background-color: transparent;
+  color: var(--color-text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: normal;
+  text-align: center;
+}
+
+.actionButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.deleteButton {
+  background-color: var(--color-accent-red);
+  border-color: var(--color-fill-3);
+  color: #ffffff;
+}
+
+.downloadButton {
+  background-color: var(--color-accent-blue);
+  border-color: var(--color-fill-3);
+  color: #ffffff;
+}
+
+.qrImage {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  background-color: var(--color-fill-0);
+  border: 1px solid var(--color-fill-3);
+}
+
+.qrPlaceholder {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid var(--color-fill-3);
+  background-color: transparent;
+  color: var(--color-text-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+  padding: 6px;
+}
+
+.qrPlaceholder:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

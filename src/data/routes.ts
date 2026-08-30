@@ -104,6 +104,22 @@ export const TRANSIT_OPERATORS: TransitOperator[] = [
     firstDeparture: null,
     lastDeparture: null,
   },
+  {
+    slug: "brisa",
+    name: "Brisa",
+    city: "ensenada",
+    terminalLocation: null,
+    firstDeparture: null,
+    lastDeparture: null,
+  },
+  {
+    slug: "nativos",
+    name: "Nativos",
+    city: "ensenada",
+    terminalLocation: null,
+    firstDeparture: null,
+    lastDeparture: null,
+  },
 ];
 
 export const TRANSIT_ROUTES: TransitRoute[] = [
@@ -215,6 +231,8 @@ export const OPERATOR_EMPRESA: Record<string, string> = {
   rojos: "rojos",
   amarillos: "amarillos",
   vigia: "vigia",
+  brisa: "brisa",
+  nativos: "nativos",
 };
 
 export function getEmpresaByOperatorSlug(slug: string): string {
