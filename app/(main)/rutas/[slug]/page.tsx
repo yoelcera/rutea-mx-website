@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { RouteMap } from "@/components/route_map/route_map";
+import { RouteMapMapKit } from "@/components/route_map_mapkit/route_map_mapkit";
 import { Section } from "@/components/section/section";
 import {
   getAllRouteSlugs,
@@ -46,7 +46,7 @@ export default async function RoutePage({
           </span>
         </header>
 
-        <RouteMap
+        <RouteMapMapKit
           path={route.path}
           stops={route.stops}
           color={ROUTE_COLOR_HEX[route.color]}

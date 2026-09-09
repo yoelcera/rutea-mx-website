@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AuthModal } from "@/components/auth_modal/auth_modal";
-import { BusMap } from "@/components/bus_map/bus_map";
+import { BusMapMapKit } from "@/components/bus_map_mapkit/bus_map_mapkit";
 import {
   getOperatorBySlug,
   getOperatorSlugByEmpresa,
@@ -87,6 +87,7 @@ function AdminGateInner() {
   const chipColor = routes[0] ? ROUTE_COLOR_HEX[routes[0].color] : DEFAULT_CHIP_COLOR;
   const chipTextColor = routes[0] ? ROUTE_COLOR_TEXT[routes[0].color] : DEFAULT_CHIP_TEXT_COLOR;
   const totalPassengers = buses.filter(isBusActive).reduce((sum, bus) => sum + bus.passengersCount, 0);
+  const activeDrivers = buses.filter(isBusActive).filter((bus) => Boolean(bus.driverId)).length;
   const selectedBus = buses.find((bus) => bus.id === selectedBusId) ?? null;
 
   return (
@@ -96,6 +97,7 @@ function AdminGateInner() {
           Bienvenido{firstName ? `, ${firstName}` : ""}.
         </p>
         <p className={styles.message}>Empresa: {operator?.name ?? empresa}</p>
+        <p className={styles.message}>Choferes activos: {activeDrivers}</p>
         <p className={styles.message}>Pasajeros totales: {totalPassengers}</p>
       </div>
       <div className={styles.busRosterRow}>
@@ -161,7 +163,7 @@ function AdminGateInner() {
           />
         </div>
       )}
-      {empresa && <BusMap empresa={empresa} buses={buses} />}
+      {empresa && <BusMapMapKit empresa={empresa} buses={buses} />}
     </div>
   );
 }

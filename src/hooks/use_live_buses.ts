@@ -12,6 +12,7 @@ export interface LiveBus {
   routeId: string;
   lat: number | null;
   lng: number | null;
+  driverId: string | null;
   driverName: string;
   unidad: string;
   plate: string;
@@ -25,6 +26,11 @@ export function isBusActive(bus: LiveBus): bus is LiveBus & { lat: number; lng: 
   if (bus.lat === null || bus.lng === null) return false;
   if (!bus.updatedAt) return true;
   return Date.now() - bus.updatedAt.getTime() <= STALE_MINUTES * 60 * 1000;
+}
+
+/** Un bus solo cuenta como "con chofer" si tiene driver_id y una ubicación real. */
+export function hasAssignedDriver(bus: LiveBus): bus is LiveBus & { lat: number; lng: number } {
+  return Boolean(bus.driverId) && bus.lat !== null && bus.lng !== null;
 }
 
 export function useLiveBuses(empresa: string | null) {
@@ -56,6 +62,7 @@ export function useLiveBuses(empresa: string | null) {
           routeId: (data.route_id as string) ?? "",
           lat: location?.latitude ?? null,
           lng: location?.longitude ?? null,
+          driverId: (data.driver_id as string) ?? null,
           driverName: (data.driver_name as string) ?? "",
           unidad: (data.unidad as string) ?? "",
           plate: (data.plate as string) ?? "",
