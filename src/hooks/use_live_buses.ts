@@ -30,7 +30,11 @@ export function isBusActive(bus: LiveBus): bus is LiveBus & { lat: number; lng: 
 
 /** Un bus solo cuenta como "con chofer" si tiene driver_id y una ubicación real. */
 export function hasAssignedDriver(bus: LiveBus): bus is LiveBus & { lat: number; lng: number } {
-  return Boolean(bus.driverId) && bus.lat !== null && bus.lng !== null;
+  if (!bus.driverId || bus.lat === null || bus.lng === null) return false;
+  // driver_id se actualiza antes que driver_location en Firestore; mientras tanto
+  // driver_location trae (0,0) como placeholder — lo tratamos como "sin ubicación aún".
+  if (bus.lat === 0 && bus.lng === 0) return false;
+  return true;
 }
 
 export function useLiveBuses(empresa: string | null) {
