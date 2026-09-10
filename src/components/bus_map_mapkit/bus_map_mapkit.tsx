@@ -1,11 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import {
-  getOperatorSlugByEmpresa,
-  getRoutesByOperator,
-  ROUTE_COLOR_HEX,
-} from "@/data/routes";
+import { getOperatorSlugByEmpresa, getRoutesByOperator, ROUTE_COLOR_HEX } from "@/data/routes";
 import { useTheme } from "@/hooks/useTheme";
 import { useMapKitScript } from "@/hooks/use_mapkit_script";
 import { hasAssignedDriver, type LiveBus } from "@/hooks/use_live_buses";
@@ -100,14 +96,20 @@ export function BusMapMapKit({ empresa, buses, height = 420 }: BusMapProps) {
           const content = document.createElement("div");
           content.className = styles.busPin;
 
-          const dot = document.createElement("span");
-          dot.className = styles.busDot;
-          dot.style.backgroundColor = pinColor;
-          content.appendChild(dot);
+          const circle = document.createElement("span");
+          circle.className = styles.busCircle;
+          circle.style.backgroundColor = pinColor;
+
+          const icon = document.createElement("span");
+          icon.className = styles.busIcon;
+          circle.appendChild(icon);
+
+          content.appendChild(circle);
 
           const labelEl = document.createElement("span");
           labelEl.className = styles.busLabel;
           labelEl.textContent = label;
+
           content.appendChild(labelEl);
 
           return content;
