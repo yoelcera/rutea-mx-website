@@ -45,3 +45,21 @@
   font-size: 14px;
   font-weight: 500;
 }
+
+@media (max-width: 700px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 0 20px;
+  }
+
+  .buttonRow {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .title {
+    font-size: 26px;
+  }
+}

@@ -160,6 +160,8 @@ function AdminGateInner() {
             busDocId={selectedBus.id}
             busId={selectedBus.busId}
             qrGenerated={selectedBus.qrGenerated}
+            unidad={selectedBus.unidad}
+            empresaName={operator?.name ?? empresa ?? ""}
           />
         </div>
       )}

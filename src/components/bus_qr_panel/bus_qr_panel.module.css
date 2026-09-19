@@ -65,3 +65,10 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+@media (max-width: 700px) {
+  .side {
+    width: 100%;
+    max-width: 200px;
+  }
+}
