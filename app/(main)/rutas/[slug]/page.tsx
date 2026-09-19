@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { RouteInfoGrid } from "@/components/route_info_grid/route_info_grid";
 import { RouteMapMapKit } from "@/components/route_map_mapkit/route_map_mapkit";
 import { Section } from "@/components/section/section";
 import {
@@ -45,6 +46,18 @@ export default async function RoutePage({
             {operator?.name ?? "Operador"}
           </span>
         </header>
+
+        <RouteInfoGrid
+          routeId={route.id}
+          stopCount={route.stops.length}
+          fallback={{
+            fare: route.fare,
+            firstDeparture: route.firstDeparture,
+            lastDeparture: route.lastDeparture,
+            initialFrequencyMinutes: route.initialFrequencyMinutes,
+            frequencyMinutes: route.frequencyMinutes,
+          }}
+        />
 
         <RouteMapMapKit
           path={route.path}
