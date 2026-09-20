@@ -103,7 +103,7 @@ export function RouteMapMapKit({
 
     const recenterIcon = document.createElement("span");
     recenterIcon.className = "material-symbols-rounded";
-    recenterIcon.textContent = "my_location";
+    recenterIcon.textContent = "zoom_in_map";
     recenterButton.appendChild(recenterIcon);
 
     recenterButton.addEventListener("click", () => {

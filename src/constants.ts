@@ -41,6 +41,7 @@ export const MATERIAL_SYMBOLS = [
   "qr_code_2",
   "location_on",
   "location_off",
+  "zoom_in_map",
 ] as const;
 
 // Neutral
