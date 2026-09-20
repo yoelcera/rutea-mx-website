@@ -7,8 +7,7 @@ import type { LatLngLiteral, RouteStop } from "@/data/routes";
 import styles from "./route_map_mapkit.module.css";
 
 const MAPKIT_TOKEN = process.env.NEXT_PUBLIC_MAPKIT_TOKEN ?? "";
-/** Temporalmente apagado por decisión de producto — igual que en la versión Google. */
-const SHOW_STOP_MARKERS = false;
+const SHOW_STOP_MARKERS = true;
 
 interface RouteMapProps {
   path: LatLngLiteral[];
@@ -66,17 +65,19 @@ export function RouteMapMapKit({
 
     if (SHOW_STOP_MARKERS) {
       stops.forEach((stop, index) => {
+        const label = stop.label ?? String(index + 1);
+        const title = stop.isTerminal ? "Inicio/Fin" : `Parada ${label}`;
         const annotation = new mapkit.Annotation(
           { latitude: stop.lat, longitude: stop.lng },
           () => {
             const icon = document.createElement("img");
             icon.src = stopIconSrc;
-            icon.alt = `Parada ${index + 1}`;
+            icon.alt = title;
             icon.style.width = "36px";
             icon.style.height = "36px";
             return icon;
           },
-          { title: `Parada ${index + 1}` }
+          { title }
         );
         map.addAnnotation(annotation);
         items.push(annotation);
