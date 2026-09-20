@@ -3,6 +3,7 @@
   width: 100%;
   border-radius: 24px;
   overflow: hidden;
+  background-color: var(--color-fill-1);
 }
 
 .recenterButton {
@@ -45,4 +46,9 @@
   color: var(--color-text-secondary);
   text-align: center;
   padding: 20px;
+}
+
+.stopsButton {
+  composes: recenterButton;
+  bottom: 58px;
 }

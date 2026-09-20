@@ -34,6 +34,8 @@ declare global {
       title?: string;
       subtitle?: string;
       data?: Record<string, unknown>;
+      animates?: boolean;
+      visible?: boolean;
     }
 
     interface Annotation {
@@ -41,6 +43,7 @@ declare global {
       title?: string;
       element: HTMLElement;
       animates: boolean;
+      visible: boolean;
     }
 
     interface MapShowItemsOptions {
