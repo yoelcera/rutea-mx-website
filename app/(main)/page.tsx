@@ -105,15 +105,8 @@ export default function Page() {
             description="Diseños de menú para todos"
             media={
               <CardGrid.StackedCard.Image
-                src="/design_modes_light.png"
-                srcset={[
-                  {
-                    src: "/design_modes_dark.png",
-                    theme: "dark",
-                  },
-                ]}
+                src="/design_modes.png"
                 alt="Grid"
-                bezelCrop={{ edge: "bottom", croppedRatio: 0.1 }}
               />
             }
             textAlignment="leading"
