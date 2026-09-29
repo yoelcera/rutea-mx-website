@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["8395JXH4P2.xera.ruteaMX"],
+        "components": [
+          { "/": "/qr/*", "comment": "QR de Rutea (rutas, bicis, paradas…)" }
+        ]
+      }
+    ]
+  }
+}
