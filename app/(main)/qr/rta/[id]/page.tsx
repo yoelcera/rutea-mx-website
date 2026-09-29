@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { TRANSIT_ROUTES } from "@/data/routes";
 
-// Genera /qr/bus/<uuid> para cada ruta (mayúsculas y minúsculas)
+// Genera /qr/rta/<uuid> para cada ruta (mayúsculas y minúsculas)
 export async function generateStaticParams() {
   return TRANSIT_ROUTES.flatMap((route) => [
     { id: route.id },
@@ -11,7 +11,7 @@ export async function generateStaticParams() {
 
 export const dynamicParams = false;
 
-export default async function QrBusRedirect({
+export default async function QrRouteRedirect({
   params,
 }: {
   params: Promise<{ id: string }>;
