@@ -7,11 +7,14 @@ import {
   getOperatorBySlug,
   getOperatorSlugByEmpresa,
   getRoutesByOperator,
+  MOBILITY_ROSTER_LABEL,
+  MobilityType,
   ROUTE_COLOR_HEX,
   ROUTE_COLOR_TEXT,
 } from "@/data/routes";
 import { BusQrPanel } from "@/components/bus_qr_panel/bus_qr_panel";
 import { useAdminAuth } from "@/hooks/use_admin_auth";
+import { useLinkedBikesCount } from "@/hooks/use_linked_bikes_count";
 import { isBusActive, useLiveBuses } from "@/hooks/use_live_buses";
 import { isFirebaseConfigured } from "@/lib/firebase";
 import styles from "./admin_gate.module.css";
@@ -34,10 +37,12 @@ export function AdminGateContent() {
 }
 
 function AdminGateInner() {
-  const { user, nombre, empresa, status, loading, signOut } = useAdminAuth();
+  const { user, nombre, empresa, mobilityType, status, loading, signOut } = useAdminAuth();
   const [showModal, setShowModal] = useState(false);
   const [selectedBusId, setSelectedBusId] = useState<string | null>(null);
   const buses = useLiveBuses(empresa);
+  const isBike = mobilityType === MobilityType.Bike;
+  const totalCyclists = useLinkedBikesCount(empresa, isBike);
 
   if (loading) {
     return (
@@ -97,11 +102,17 @@ function AdminGateInner() {
           Bienvenido{firstName ? `, ${firstName}` : ""}.
         </p>
         <p className={styles.message}>Empresa: {operator?.name ?? empresa}</p>
-        <p className={styles.message}>Choferes activos: {activeDrivers}</p>
-        <p className={styles.message}>Pasajeros totales: {totalPassengers}</p>
+        {isBike ? (
+          <p className={styles.message}>Ciclistas totales: {totalCyclists}</p>
+        ) : (
+          <>
+            <p className={styles.message}>Choferes activos: {activeDrivers}</p>
+            <p className={styles.message}>Pasajeros totales: {totalPassengers}</p>
+          </>
+        )}
       </div>
       <div className={styles.busRosterRow}>
-        <p className={styles.message}>Buses:</p>
+        <p className={styles.message}>{MOBILITY_ROSTER_LABEL[mobilityType]}</p>
         <div className={styles.busRoster}>
         {buses.map((bus) => (
           <button

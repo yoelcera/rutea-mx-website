@@ -1,3 +1,5 @@
+import { ImiType } from "./imi_types";
+
 export type LatLngLiteral = {
   lat: number;
   lng: number;
@@ -59,3 +61,20 @@ export function formatClockTime({ hour, minute }: ClockTime): string {
 export function formatFare(amount: number): string {
   return amount === 0 ? "Gratis" : `$${amount.toFixed(2)}`;
 }
+
+export enum MobilityType {
+  Bus = "bus",
+  Bike = "bike",
+}
+
+/** imi_tag de cada modo de movilidad (bike → BIC, bus → BUS). */
+export const MOBILITY_IMI_TAG: Record<MobilityType, ImiType> = {
+  [MobilityType.Bus]: ImiType.Bus,
+  [MobilityType.Bike]: ImiType.Bike,
+};
+
+/** Etiqueta de la lista del panel admin según el tipo de movilidad. */
+export const MOBILITY_ROSTER_LABEL: Record<MobilityType, string> = {
+  [MobilityType.Bus]: "Buses:",
+  [MobilityType.Bike]: "Ciclistas:",
+};

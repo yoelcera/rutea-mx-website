@@ -5,7 +5,7 @@
  * con sus `stops` y `path` como constantes aparte. Este archivo solo las junta.
  */
 
-import type { TransitRoute, TransitRouteColor } from "./route_types";
+import { MobilityType, type TransitRoute, type TransitRouteColor } from "./route_types";
 export * from "./route_types";
 
 import { ensVioleta01Route } from "./ensenada/violeta";
@@ -54,17 +54,18 @@ export type TransitOperator = {
   slug: string;
   name: string;
   city: string;
+  mobilityType: MobilityType;
   /** TODO: no está en el dato de origen. */
   terminalLocation: string | null;
 };
 
 export const TRANSIT_OPERATORS: TransitOperator[] = [
-  { slug: "violeta", name: "Violeta", city: "ensenada", terminalLocation: null },
-  { slug: "rojos", name: "Rojos y Blancos", city: "ensenada", terminalLocation: null },
-  { slug: "amarillos", name: "Amarillos y Blancos", city: "ensenada", terminalLocation: null },
-  { slug: "vigia", name: "Vigía", city: "ensenada", terminalLocation: null },
-  { slug: "nativos", name: "Nativos", city: "ensenada", terminalLocation: null },
-  { slug: "brisa", name: "Brisa", city: "ensenada", terminalLocation: null },
+  { slug: "violeta", name: "Violeta", city: "ensenada", mobilityType: MobilityType.Bus, terminalLocation: null },
+  { slug: "rojos", name: "Rojos y Blancos", city: "ensenada", mobilityType: MobilityType.Bus, terminalLocation: null },
+  { slug: "amarillos", name: "Amarillos y Blancos", city: "ensenada", mobilityType: MobilityType.Bus, terminalLocation: null },
+  { slug: "vigia", name: "Vigía", city: "ensenada", mobilityType: MobilityType.Bus, terminalLocation: null },
+  { slug: "nativos", name: "Nativos", city: "ensenada", mobilityType: MobilityType.Bus, terminalLocation: null },
+  { slug: "brisa", name: "Brisa", city: "ensenada", mobilityType: MobilityType.Bus, terminalLocation: null },
 ];
 
 export const TRANSIT_ROUTES: TransitRoute[] = [

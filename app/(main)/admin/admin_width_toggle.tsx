@@ -2,13 +2,26 @@
 
 import { useState } from "react";
 import { useAdminAuth } from "@/hooks/use_admin_auth";
+import { RegisterBikeModal } from "@/components/register_bike_modal/register_bike_modal";
 import { RegisterBusModal } from "@/components/register_bus_modal/register_bus_modal";
+import { MobilityType } from "@/data/routes";
 import styles from "./admin_width_toggle.module.css";
 
 export function AdminWidthToggle({ children }: { children: React.ReactNode }) {
   const [isWide, setIsWide] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const { status, empresa, signOut } = useAdminAuth();
+  const { status, empresa, mobilityType, signOut } = useAdminAuth();
+
+  function renderRegisterModal() {
+    const close = () => setShowRegisterModal(false);
+
+    switch (mobilityType) {
+      case MobilityType.Bus:
+        return <RegisterBusModal empresa={empresa} onClose={close} />;
+      case MobilityType.Bike:
+        return <RegisterBikeModal empresa={empresa} onClose={close} />;
+    }
+  }
 
   return (
     <div className={styles.outer}>
@@ -51,12 +64,7 @@ export function AdminWidthToggle({ children }: { children: React.ReactNode }) {
         {children}
       </div>
 
-      {showRegisterModal && (
-        <RegisterBusModal
-          empresa={empresa}
-          onClose={() => setShowRegisterModal(false)}
-        />
-      )}
+      {showRegisterModal && renderRegisterModal()}
     </div>
   );
 }

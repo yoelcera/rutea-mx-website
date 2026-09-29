@@ -1,9 +1,27 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { getEmpresaByOperatorSlug, TRANSIT_OPERATORS } from "@/data/routes";
+import {
+  getEmpresaByOperatorSlug,
+  MobilityType,
+  TRANSIT_OPERATORS,
+} from "@/data/routes";
 import { useAdminAuth } from "@/hooks/use_admin_auth";
 import styles from "./auth_modal.module.css";
+
+// Empresas que no son de transporte público (no aparecen en el catálogo de rutas)
+const EXTRA_EMPRESAS = [
+  { empresa: "uabc", name: "UABC", mobilityType: MobilityType.Bike },
+];
+
+const EMPRESA_OPTIONS = [
+  ...TRANSIT_OPERATORS.map((operator) => ({
+    empresa: getEmpresaByOperatorSlug(operator.slug),
+    name: operator.name,
+    mobilityType: operator.mobilityType,
+  })),
+  ...EXTRA_EMPRESAS,
+];
 
 type Mode = "signIn" | "signUp";
 
@@ -49,7 +67,14 @@ export function AuthModal({ onClose }: AuthModalProps) {
         await signIn(correo, password);
         onClose();
       } else {
-        await signUp({ nombre, correo, password, empresa: empresa! });
+        const selected = EMPRESA_OPTIONS.find((option) => option.empresa === empresa)!;
+        await signUp({
+          nombre,
+          correo,
+          password,
+          empresa: empresa!,
+          mobilityType: selected.mobilityType,
+        });
         setSignedUp(true);
       }
     } catch (err) {
@@ -132,18 +157,18 @@ export function AuthModal({ onClose }: AuthModalProps) {
                   <div className={styles.empresaGroup}>
                     <span className={styles.empresaLabel}>Empresa</span>
                     <div className={styles.empresaOptions}>
-                      {TRANSIT_OPERATORS.map((operator) => (
+                      {EMPRESA_OPTIONS.map((option) => (
                         <button
-                          key={operator.slug}
+                          key={option.empresa}
                           type="button"
                           className={
-                            empresa === getEmpresaByOperatorSlug(operator.slug)
+                            empresa === option.empresa
                               ? styles.empresaButtonActive
                               : styles.empresaButton
                           }
-                          onClick={() => setEmpresa(getEmpresaByOperatorSlug(operator.slug))}
+                          onClick={() => setEmpresa(option.empresa)}
                         >
-                          {operator.name}
+                          {option.name}
                         </button>
                       ))}
                     </div>
