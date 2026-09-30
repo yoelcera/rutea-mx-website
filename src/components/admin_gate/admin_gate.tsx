@@ -12,9 +12,12 @@ import {
   ROUTE_COLOR_HEX,
   ROUTE_COLOR_TEXT,
 } from "@/data/routes";
+import { BikeDetails } from "@/components/bike_details/bike_details";
+import { BikeQrPanel } from "@/components/bike_qr_panel/bike_qr_panel";
 import { BusQrPanel } from "@/components/bus_qr_panel/bus_qr_panel";
 import { useAdminAuth } from "@/hooks/use_admin_auth";
 import { useLinkedBikesCount } from "@/hooks/use_linked_bikes_count";
+import { bikeToMapUnit, useLiveBikes } from "@/hooks/use_live_bikes";
 import { isBusActive, useLiveBuses } from "@/hooks/use_live_buses";
 import { isFirebaseConfigured } from "@/lib/firebase";
 import styles from "./admin_gate.module.css";
@@ -40,8 +43,9 @@ function AdminGateInner() {
   const { user, nombre, empresa, mobilityType, status, loading, signOut } = useAdminAuth();
   const [showModal, setShowModal] = useState(false);
   const [selectedBusId, setSelectedBusId] = useState<string | null>(null);
-  const buses = useLiveBuses(empresa);
   const isBike = mobilityType === MobilityType.Bike;
+  const buses = useLiveBuses(isBike ? null : empresa);
+  const bikes = useLiveBikes(empresa, isBike);
   const totalCyclists = useLinkedBikesCount(empresa, isBike);
 
   if (loading) {
@@ -94,6 +98,7 @@ function AdminGateInner() {
   const totalPassengers = buses.filter(isBusActive).reduce((sum, bus) => sum + bus.passengersCount, 0);
   const activeDrivers = buses.filter(isBusActive).filter((bus) => Boolean(bus.driverId)).length;
   const selectedBus = buses.find((bus) => bus.id === selectedBusId) ?? null;
+  const selectedBike = isBike ? bikes.find((bike) => bike.id === selectedBusId) ?? null : null;
 
   return (
     <div className={`${styles.gate} ${styles.messageBlock}`}>
@@ -114,7 +119,24 @@ function AdminGateInner() {
       <div className={styles.busRosterRow}>
         <p className={styles.message}>{MOBILITY_ROSTER_LABEL[mobilityType]}</p>
         <div className={styles.busRoster}>
-        {buses.map((bus) => (
+        {isBike
+          ? bikes.map((bike) => (
+              <button
+                key={bike.id}
+                type="button"
+                className={
+                  selectedBusId === bike.id
+                    ? `${styles.busChip} ${styles.busChipSelected}`
+                    : styles.busChip
+                }
+                onClick={() =>
+                  setSelectedBusId((prev) => (prev === bike.id ? null : bike.id))
+                }
+              >
+                {bike.number}
+              </button>
+            ))
+          : buses.map((bus) => (
           <button
             key={bus.id}
             type="button"
@@ -176,7 +198,22 @@ function AdminGateInner() {
           />
         </div>
       )}
-      {empresa && <BusMapMapKit empresa={empresa} buses={buses} />}
+      {selectedBike && (
+        <div className={styles.busDetails}>
+          <BikeDetails key={selectedBike.id} bike={selectedBike} />
+
+          <BikeQrPanel
+            bikeId={selectedBike.id}
+            qrGenerated={selectedBike.qrGenerated}
+            number={selectedBike.number}
+            empresa={empresa ?? ""}
+            empresaName={operator?.name ?? empresa ?? ""}
+          />
+        </div>
+      )}
+      {empresa && (
+        <BusMapMapKit empresa={empresa} buses={isBike ? bikes.map(bikeToMapUnit) : buses} />
+      )}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import { doc, getDoc, serverTimestamp } from "firebase/firestore";
+import { collection, doc, getDoc, serverTimestamp } from "firebase/firestore";
 import { BIKE_TYPE_LABEL, BikeType } from "@/data/bike_types";
 import { useAdminAuth } from "@/hooks/use_admin_auth";
 import { db } from "@/lib/firebase";
@@ -48,12 +48,11 @@ export function RegisterBikeModal({ empresa, onClose }: RegisterBikeModalProps) 
     setLoading(true);
     try {
       await createWithNextFolio(firestore, mobilityType, empresa, (transaction, folio) => {
-        // Igual que BikeModel.init en la app: UUID en minúsculas
-        const id = crypto.randomUUID().toLowerCase();
+        const bikeRef = doc(collection(firestore, "bikes")); // mismo método que buses
         const number = String(folio).padStart(3, "0");
 
-        transaction.set(doc(firestore, "bikes", id), {
-          id,
+        transaction.set(bikeRef, {
+          id: bikeRef.id,
           imi: buildImi({ mobilityType, folio, operator: empresa }),
           number,
           operator: empresa,
@@ -83,6 +82,7 @@ export function RegisterBikeModal({ empresa, onClose }: RegisterBikeModalProps) 
           createdAt: serverTimestamp(),
           createdBy: user.uid,
           updatedAt: serverTimestamp(),
+          qrGenerated: false,
         });
       });
       onClose();

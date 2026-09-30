@@ -23,3 +23,21 @@ export const TRIP_TYPE_LABEL: Record<TripType, string> = {
   [TripType.Occasional]: "Ocasional",
   [TripType.Ride]: "Rodada",
 };
+
+export enum BikeStatus {
+  Available = "available",
+  Linked = "linked",
+  Maintenance = "maintenance",
+  Lost = "lost",
+  Retired = "retired",
+  Unknown = "unknown",
+}
+
+export const BIKE_STATUS_LABEL: Record<BikeStatus, string> = {
+  [BikeStatus.Available]: "Disponible",
+  [BikeStatus.Linked]: "Vinculada",
+  [BikeStatus.Maintenance]: "Mantenimiento",
+  [BikeStatus.Lost]: "Extraviada",
+  [BikeStatus.Retired]: "Dada de baja",
+  [BikeStatus.Unknown]: "Desconocido",
+};
