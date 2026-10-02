@@ -19,7 +19,7 @@ export function RegisterBikeModal({ empresa, onClose }: RegisterBikeModalProps) 
   const [brand, setBrand] = useState("");
   const [model, setModel] = useState("");
   const [bikeType, setBikeType] = useState<BikeType>(BikeType.Street);
-  const [homeStationID, setHomeStationID] = useState("");
+  const [homeStationId, setHomeStationId] = useState("");
   const [nextFolio, setNextFolio] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -61,28 +61,23 @@ export function RegisterBikeModal({ empresa, onClose }: RegisterBikeModalProps) 
           // Bici
           brand: brand.trim(),
           model: model.trim(),
-          bikeType,
+          bike_type: bikeType,
 
-          // Vínculo con usuario
-          linkedUserID: null,
-          linkedAt: null,
-          tripType: null, // TripType, se asigna al vincular
-
-          // Uso
-          lastRideAt: null,
-          totalRides: 0,
-          lastMaintenanceAt: null,
+          // Uso (obligatorio: la app falla al leer la bici si falta)
+          total_rides: 0,
 
           // Ubicación
-          homeStationID: homeStationID.trim() || null,
-          lastLocation: null,
-          lastLocationAt: null,
+          ...(homeStationId.trim() && { home_station_id: homeStationId.trim() }),
 
           // Auditoría
-          createdAt: serverTimestamp(),
-          createdBy: user.uid,
-          updatedAt: serverTimestamp(),
-          qrGenerated: false,
+          created_at: serverTimestamp(),
+          created_by: user.uid,
+          updated_at: serverTimestamp(),
+          qr_generated: true, // el QR se genera en automático al registrar, igual que en buses
+
+          // rider_id, rider_linked_at, trip_type, rider_location, last_location,
+          // last_location_at, last_ride_at y last_maintenance_at no se escriben aquí:
+          // los crea la app cuando aplican.
         });
       });
       onClose();
@@ -144,8 +139,8 @@ export function RegisterBikeModal({ empresa, onClose }: RegisterBikeModalProps) 
               className={styles.input}
               type="text"
               placeholder="Estación base (opcional)"
-              value={homeStationID}
-              onChange={(event) => setHomeStationID(event.target.value)}
+              value={homeStationId}
+              onChange={(event) => setHomeStationId(event.target.value)}
             />
 
             {error && <p className={styles.error}>{error}</p>}

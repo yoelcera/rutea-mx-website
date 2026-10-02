@@ -50,8 +50,8 @@ export function BikeQrPanel({ bikeId, qrGenerated, number, empresa, empresaName 
     setGenerating(true);
     try {
       await updateDoc(doc(db, "bikes", bikeId), {
-        qrGenerated: true,
-        updatedAt: serverTimestamp(),
+        qr_generated: true,
+        updated_at: serverTimestamp(),
       });
     } finally {
       setGenerating(false);

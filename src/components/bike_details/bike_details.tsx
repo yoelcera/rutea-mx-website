@@ -1,16 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { deleteField, doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import {
   BIKE_STATUS_LABEL,
   BIKE_TYPE_LABEL,
   BikeStatus,
   BikeType,
   TRIP_TYPE_LABEL,
-  TripType,
 } from "@/data/bike_types";
-import type { LiveBike } from "@/hooks/use_live_bikes";
+import { hasActiveRide, type LatLng, type LiveBike } from "@/hooks/use_live_bikes";
 import { db } from "@/lib/firebase";
 import styles from "@/components/admin_gate/admin_gate.module.css";
 
@@ -18,23 +17,24 @@ function formatDate(date: Date | null) {
   return date ? date.toLocaleString("es-MX") : "—";
 }
 
+function formatLocation(location: LatLng | null) {
+  return location ? `${location.lat.toFixed(5)}, ${location.lng.toFixed(5)}` : "—";
+}
+
+// rider_id y trip_type los escribe la app: aquí son solo lectura
 interface Draft {
   brand: string;
   model: string;
-  bikeType: BikeType | "";
+  bike_type: BikeType | "";
   status: BikeStatus;
-  linkedUserID: string;
-  tripType: TripType | "";
 }
 
 function toDraft(bike: LiveBike): Draft {
   return {
     brand: bike.brand,
     model: bike.model,
-    bikeType: bike.bikeType ?? "",
+    bike_type: bike.bike_type ?? "",
     status: bike.status,
-    linkedUserID: bike.linkedUserID ?? "",
-    tripType: bike.tripType ?? "",
   };
 }
 
@@ -62,19 +62,12 @@ export function BikeDetails({ bike }: { bike: LiveBike }) {
     setSaving(true);
     setError(null);
     try {
-      const linkedUserID = draft.linkedUserID.trim() || null;
-      const linkChanged = linkedUserID !== bike.linkedUserID;
-
       await updateDoc(doc(db, "bikes", bike.id), {
         brand: draft.brand.trim(),
         model: draft.model.trim(),
-        bikeType: draft.bikeType || null,
+        bike_type: draft.bike_type || deleteField(),
         status: draft.status,
-        linkedUserID,
-        tripType: draft.tripType || null,
-        // Si cambia el vínculo, linkedAt se actualiza solo
-        ...(linkChanged && { linkedAt: linkedUserID ? serverTimestamp() : null }),
-        updatedAt: serverTimestamp(),
+        updated_at: serverTimestamp(),
       });
       setEditing(false);
     } catch (err) {
@@ -92,7 +85,7 @@ export function BikeDetails({ bike }: { bike: LiveBike }) {
       </p>
     );
 
-  const text = (key: "brand" | "model" | "linkedUserID", shown: string) =>
+  const text = (key: "brand" | "model", shown: string) =>
     editing ? (
       <input
         className={styles.detailInput}
@@ -116,8 +109,8 @@ export function BikeDetails({ bike }: { bike: LiveBike }) {
         editing ? (
           <select
             className={styles.detailInput}
-            value={draft.bikeType}
-            onChange={(event) => update("bikeType", event.target.value as BikeType | "")}
+            value={draft.bike_type}
+            onChange={(event) => update("bike_type", event.target.value as BikeType | "")}
           >
             <option value="">—</option>
             {Object.values(BikeType).map((type) => (
@@ -126,12 +119,12 @@ export function BikeDetails({ bike }: { bike: LiveBike }) {
               </option>
             ))}
           </select>
-        ) : bike.bikeType ? (
-          BIKE_TYPE_LABEL[bike.bikeType]
+        ) : bike.bike_type ? (
+          BIKE_TYPE_LABEL[bike.bike_type]
         ) : (
           "—"
         ),
-        bike.bikeType !== null
+        bike.bike_type !== null
       )}
       {row(
         "Estado",
@@ -153,60 +146,43 @@ export function BikeDetails({ bike }: { bike: LiveBike }) {
         true
       )}
 
-      {/* Vínculo con usuario */}
-      {row("Vinculada a", text("linkedUserID", bike.linkedUserID ?? ""), bike.linkedUserID !== null)}
-      {row("Vinculada el", formatDate(bike.linkedAt), bike.linkedAt !== null)}
+      {/* Vínculo con usuario (solo lectura) */}
+      {row("Vinculada a", bike.rider_id ?? "—", bike.rider_id !== null)}
+      {row("Vinculada el", formatDate(bike.rider_linked_at), bike.rider_linked_at !== null)}
       {row(
         "Tipo de traslado",
-        editing ? (
-          <select
-            className={styles.detailInput}
-            value={draft.tripType}
-            onChange={(event) => update("tripType", event.target.value as TripType | "")}
-          >
-            <option value="">—</option>
-            {Object.values(TripType).map((type) => (
-              <option key={type} value={type}>
-                {TRIP_TYPE_LABEL[type]}
-              </option>
-            ))}
-          </select>
-        ) : bike.tripType ? (
-          TRIP_TYPE_LABEL[bike.tripType]
-        ) : (
-          "—"
-        ),
-        bike.tripType !== null
+        bike.trip_type ? TRIP_TYPE_LABEL[bike.trip_type] : "—",
+        bike.trip_type !== null
       )}
 
       {/* Uso */}
-      {row("Viajes totales", bike.totalRides, true)}
-      {row("Último viaje", formatDate(bike.lastRideAt), bike.lastRideAt !== null)}
+      {row("Viajes totales", bike.total_rides, true)}
+      {row("Último viaje", formatDate(bike.last_ride_at), bike.last_ride_at !== null)}
       {row(
         "Último mantenimiento",
-        formatDate(bike.lastMaintenanceAt),
-        bike.lastMaintenanceAt !== null
+        formatDate(bike.last_maintenance_at),
+        bike.last_maintenance_at !== null
       )}
 
-      {/* Ubicación */}
-      {row("Estación base", bike.homeStationID ?? "—", bike.homeStationID !== null)}
-      {row(
-        "Última ubicación",
-        bike.lat !== null && bike.lng !== null
-          ? `${bike.lat.toFixed(5)}, ${bike.lng.toFixed(5)}`
-          : "—",
-        bike.lat !== null && bike.lng !== null
-      )}
-      {row(
-        "Ubicación actualizada",
-        formatDate(bike.lastLocationAt),
-        bike.lastLocationAt !== null
+      {/* Ubicación: durante el ride, igual que "Ubicación" del bus; si no, la última (estacionada) */}
+      {row("Estación base", bike.home_station_id ?? "—", bike.home_station_id !== null)}
+      {hasActiveRide(bike) ? (
+        row("Ubicación", formatLocation(bike.rider_location), true)
+      ) : (
+        <>
+          {row("Última ubicación", formatLocation(bike.last_location), bike.last_location !== null)}
+          {row(
+            "Ubicación actualizada",
+            formatDate(bike.last_location_at),
+            bike.last_location_at !== null
+          )}
+        </>
       )}
 
       {/* Auditoría */}
-      {row("Creada el", formatDate(bike.createdAt), bike.createdAt !== null)}
-      {row("Creada por", bike.createdBy || "—", Boolean(bike.createdBy))}
-      {row("Actualizada el", formatDate(bike.updatedAt), bike.updatedAt !== null)}
+      {row("Creada el", formatDate(bike.created_at), bike.created_at !== null)}
+      {row("Creada por", bike.created_by || "—", Boolean(bike.created_by))}
+      {row("Actualizada el", formatDate(bike.updated_at), bike.updated_at !== null)}
 
       {error && <p className={styles.deniedMessage}>{error}</p>}
 

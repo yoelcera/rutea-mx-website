@@ -1,0 +1,63 @@
+.map {
+  width: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.placeholder {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 24px;
+  background: var(--color-fill-1);
+  color: var(--color-text-secondary);
+  text-align: center;
+  padding: 20px;
+}
+
+.bikePin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transform: translateY(6px);
+}
+
+.bikeCircle {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 3px solid color-mix(in srgb, #FFFFFF 85%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.bikeIcon {
+  width: 18px;
+  height: 18px;
+  background-color: color-mix(in srgb, #FFFFFF 85%, transparent);
+  -webkit-mask-image: url("/bike.png");
+  mask-image: url("/bike.png");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.bikeLabel {
+  position: relative;
+  z-index: 1;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  background-color: color-mix(in srgb, var(--color-fill-0) 85%, transparent);
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}

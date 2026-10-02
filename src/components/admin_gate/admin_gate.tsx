@@ -17,7 +17,8 @@ import { BikeQrPanel } from "@/components/bike_qr_panel/bike_qr_panel";
 import { BusQrPanel } from "@/components/bus_qr_panel/bus_qr_panel";
 import { useAdminAuth } from "@/hooks/use_admin_auth";
 import { useLinkedBikesCount } from "@/hooks/use_linked_bikes_count";
-import { bikeToMapUnit, useLiveBikes } from "@/hooks/use_live_bikes";
+import { BikeMapMapKit } from "@/components/bike_map_mapkit/bike_map_mapkit";
+import { hasActiveRide, useLiveBikes } from "@/hooks/use_live_bikes";
 import { isBusActive, useLiveBuses } from "@/hooks/use_live_buses";
 import { isFirebaseConfigured } from "@/lib/firebase";
 import styles from "./admin_gate.module.css";
@@ -129,6 +130,11 @@ function AdminGateInner() {
                     ? `${styles.busChip} ${styles.busChipSelected}`
                     : styles.busChip
                 }
+                style={
+                  hasActiveRide(bike)
+                    ? { backgroundColor: chipColor, color: chipTextColor }
+                    : undefined
+                }
                 onClick={() =>
                   setSelectedBusId((prev) => (prev === bike.id ? null : bike.id))
                 }
@@ -204,16 +210,19 @@ function AdminGateInner() {
 
           <BikeQrPanel
             bikeId={selectedBike.id}
-            qrGenerated={selectedBike.qrGenerated}
+            qrGenerated={selectedBike.qr_generated}
             number={selectedBike.number}
             empresa={empresa ?? ""}
             empresaName={operator?.name ?? empresa ?? ""}
           />
         </div>
       )}
-      {empresa && (
-        <BusMapMapKit empresa={empresa} buses={isBike ? bikes.map(bikeToMapUnit) : buses} />
-      )}
+      {empresa &&
+        (isBike ? (
+          <BikeMapMapKit empresa={empresa} bikes={bikes} />
+        ) : (
+          <BusMapMapKit empresa={empresa} buses={buses} />
+        ))}
     </div>
   );
 }
