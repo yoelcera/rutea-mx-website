@@ -9,7 +9,7 @@ import { MobilityType, type TransitRoute, type TransitRouteColor } from "./route
 export * from "./route_types";
 
 import { ensVioleta01Route } from "./ensenada/violeta";
-import { ensAguilas89Route } from "./ensenada/amarillos";
+import { ensAguilas89Route, ensVillas4Route } from "./ensenada/amarillos";
 import {
   ensAmpIndecoRoute,
   ensPopularJuarezRoute,
@@ -17,8 +17,8 @@ import {
   ensChapultepecRoute,
 } from "./ensenada/rojos";
 import { ensFloresParaisoRoute } from "./ensenada/nativos";
-import { ensEnsSauzalRoute } from "./ensenada/vigia";
-import { ensEnsSanMiguelRoute } from "./ensenada/brisa";
+import { ensEnsSauzalRoute, ensBuenaVistaEnsRoute } from "./ensenada/vigia";
+import { ensEnsSanMiguelRoute, ensEnsBuenaVistaRoute } from "./ensenada/brisa";
 
 /** Tomado directamente del color dominante de cada ícono de parada. */
 export const ROUTE_COLOR_HEX: Record<TransitRouteColor, string> = {
@@ -71,13 +71,16 @@ export const TRANSIT_OPERATORS: TransitOperator[] = [
 export const TRANSIT_ROUTES: TransitRoute[] = [
   ensVioleta01Route,
   ensAguilas89Route,
+  ensVillas4Route,
   ensAmpIndecoRoute,
   ensPopularJuarezRoute,
   ens6toAyuntamientoRoute,
   ensChapultepecRoute,
   ensFloresParaisoRoute,
   ensEnsSauzalRoute,
+  ensBuenaVistaEnsRoute,
   ensEnsSanMiguelRoute,
+  ensEnsBuenaVistaRoute,
 ];
 
 export function getAllRouteSlugs(): string[] {
