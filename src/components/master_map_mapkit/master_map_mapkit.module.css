@@ -1,0 +1,52 @@
+.wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.toggles {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  display: flex;
+  gap: 8px;
+}
+
+.toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--color-fill-3);
+  background-color: color-mix(in srgb, var(--color-fill-0) 90%, transparent);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s ease-in-out;
+}
+
+.toggleOff {
+  opacity: 0.45;
+}
+
+.toggleIcon {
+  width: 20px;
+  height: 20px;
+  background-color: var(--color-text-primary);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.busIcon {
+  -webkit-mask-image: url("/bus.png");
+  mask-image: url("/bus.png");
+}
+
+.bikeIcon {
+  -webkit-mask-image: url("/bike.png");
+  mask-image: url("/bike.png");
+}

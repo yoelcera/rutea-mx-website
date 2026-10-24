@@ -5,12 +5,15 @@ import QRCode from "qrcode";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { Icon } from "@/components/icon/icon";
 import { ImiType } from "@/data/imi_types";
-import { useAdminAuth } from "@/hooks/use_admin_auth";
+import { MobilityType } from "@/data/route_types";
 import { db } from "@/lib/firebase";
 import { deleteAndReleaseFolio } from "@/lib/folio";
 import styles from "@/components/bus_qr_panel/bus_qr_panel.module.css";
 
 const QR_BASE_URL = `https://ruteamx.app/qr/${ImiType.Bike.toLowerCase()}/`;
+
+/** Íconos de la versión compacta: 20% más chicos que el tamaño medium (24px). */
+const COMPACT_ICON_SIZE = 19;
 
 interface BikeQrPanelProps {
   bikeId: string;
@@ -18,10 +21,20 @@ interface BikeQrPanelProps {
   number: string;
   empresa: string;
   empresaName: string;
+  /** Versión compacta (panel maestro): QR del alto de la cápsula + botones de símbolo. */
+  compact?: boolean;
 }
 
-export function BikeQrPanel({ bikeId, qrGenerated, number, empresa, empresaName }: BikeQrPanelProps) {
-  const { mobilityType } = useAdminAuth();
+export function BikeQrPanel({
+  bikeId,
+  qrGenerated,
+  number,
+  empresa,
+  empresaName,
+  compact = false,
+}: BikeQrPanelProps) {
+  // Este panel es solo de bicis: siempre usa el contador de bicis (aunque lo abra la cuenta maestra)
+  const mobilityType = MobilityType.Bike;
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -140,6 +153,55 @@ export function BikeQrPanel({ bikeId, qrGenerated, number, empresa, empresaName 
     } finally {
       setDownloading(false);
     }
+  }
+
+  if (compact) {
+    return (
+      <div className={styles.compact}>
+        {qrGenerated ? (
+          qrDataUrl ? (
+            <img src={qrDataUrl} alt={`QR de la bici ${number}`} className={styles.compactQr} />
+          ) : (
+            <div className={styles.compactQr} />
+          )
+        ) : (
+          <button
+            type="button"
+            className={`${styles.compactQr} ${styles.compactQrPlaceholder}`}
+            onClick={handleGenerate}
+            disabled={generating}
+            title="Generar QR"
+            aria-label="Generar QR"
+          >
+            <Icon name="qr_code_2" size={COMPACT_ICON_SIZE} />
+          </button>
+        )}
+
+        {qrGenerated && (
+          <button
+            type="button"
+            className={`${styles.iconButton} ${styles.iconDownload}`}
+            onClick={handleDownload}
+            disabled={downloading}
+            title="Descargar QR"
+            aria-label="Descargar QR"
+          >
+            <Icon name="download" size={COMPACT_ICON_SIZE} />
+          </button>
+        )}
+
+        <button
+          type="button"
+          className={`${styles.iconButton} ${styles.iconDelete}`}
+          onClick={handleDelete}
+          disabled={deleting}
+          title="Eliminar bici"
+          aria-label="Eliminar bici"
+        >
+          <Icon name="delete" size={COMPACT_ICON_SIZE} />
+        </button>
+      </div>
+    );
   }
 
   return (

@@ -3,6 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { collection, doc, getDoc, serverTimestamp } from "firebase/firestore";
 import { BIKE_TYPE_LABEL, BikeType } from "@/data/bike_types";
+import { MobilityType } from "@/data/route_types";
 import { useAdminAuth } from "@/hooks/use_admin_auth";
 import { db } from "@/lib/firebase";
 import { counterRef, createWithNextFolio } from "@/lib/folio";
@@ -15,7 +16,9 @@ interface RegisterBikeModalProps {
 }
 
 export function RegisterBikeModal({ empresa, onClose }: RegisterBikeModalProps) {
-  const { user, mobilityType } = useAdminAuth();
+  const { user } = useAdminAuth();
+  // Este modal es solo de bicis: siempre usa el contador de bicis (aunque lo abra la cuenta maestra)
+  const mobilityType = MobilityType.Bike;
   const [brand, setBrand] = useState("");
   const [model, setModel] = useState("");
   const [bikeType, setBikeType] = useState<BikeType>(BikeType.Street);

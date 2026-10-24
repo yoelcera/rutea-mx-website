@@ -42,6 +42,9 @@ export const MATERIAL_SYMBOLS = [
   "location_on",
   "location_off",
   "zoom_in_map",
+  "download",
+  "delete",
+  "expand_more",
 ] as const;
 
 // Neutral
@@ -56,6 +59,7 @@ export const COLORS: ColorScheme = {
     "accent-brand": "#000000",
     "accent-orange": "#FF8D28",
     "accent-green": "#34C759",
+    "accent-yellow": "#FFCC00",
     "accent-red": "#FF3B30",
     "accent-blue": "#007AFF",
     "accent-indigo": "#5856D6",
@@ -73,6 +77,7 @@ export const COLORS: ColorScheme = {
     "accent-brand": "#FFFFFF",
     "accent-orange": "#FF9230",
     "accent-green": "#30D158",
+    "accent-yellow": "#FFD60A",
     "accent-red": "#FF453A",
     "accent-blue": "#0A84FF",
     "accent-indigo": "#5E5CE6",

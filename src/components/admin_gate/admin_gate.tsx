@@ -15,6 +15,7 @@ import {
 import { BikeDetails } from "@/components/bike_details/bike_details";
 import { BikeQrPanel } from "@/components/bike_qr_panel/bike_qr_panel";
 import { BusQrPanel } from "@/components/bus_qr_panel/bus_qr_panel";
+import { MasterPanel } from "@/components/master_panel/master_panel";
 import { useAdminAuth } from "@/hooks/use_admin_auth";
 import { useLinkedBikesCount } from "@/hooks/use_linked_bikes_count";
 import { BikeMapMapKit } from "@/components/bike_map_mapkit/bike_map_mapkit";
@@ -41,7 +42,7 @@ export function AdminGateContent() {
 }
 
 function AdminGateInner() {
-  const { user, nombre, empresa, mobilityType, status, loading, signOut } = useAdminAuth();
+  const { user, nombre, empresa, mobilityType, status, isMaster, loading, signOut } = useAdminAuth();
   const [showModal, setShowModal] = useState(false);
   const [selectedBusId, setSelectedBusId] = useState<string | null>(null);
   const isBike = mobilityType === MobilityType.Bike;
@@ -66,6 +67,10 @@ function AdminGateInner() {
         {showModal && <AuthModal onClose={() => setShowModal(false)} />}
       </div>
     );
+  }
+
+  if (isMaster) {
+    return <MasterPanel />;
   }
 
   if (status === "pending") {

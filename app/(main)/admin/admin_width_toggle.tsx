@@ -10,7 +10,7 @@ import styles from "./admin_width_toggle.module.css";
 export function AdminWidthToggle({ children }: { children: React.ReactNode }) {
   const [isWide, setIsWide] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const { status, empresa, mobilityType, signOut } = useAdminAuth();
+  const { status, isMaster, empresa, mobilityType, signOut } = useAdminAuth();
 
   function renderRegisterModal() {
     const close = () => setShowRegisterModal(false);
@@ -49,7 +49,7 @@ export function AdminWidthToggle({ children }: { children: React.ReactNode }) {
               </button>
             )}
 
-            {status === "approved" && (
+            {status === "approved" && !isMaster && (
               <button
                 type="button"
                 className={styles.toggleButton}

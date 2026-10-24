@@ -7,15 +7,27 @@ import { Icon } from "@/components/icon/icon";
 import { db } from "@/lib/firebase";
 import styles from "./bus_qr_panel.module.css";
 
+/** Íconos de la versión compacta: 20% más chicos que el tamaño medium (24px). */
+const COMPACT_ICON_SIZE = 19;
+
 interface BusQrPanelProps {
   busDocId: string;
   busId: string;
   qrGenerated: boolean;
   unidad: string;
   empresaName: string;
+  /** Versión compacta (panel maestro): QR del alto de la cápsula + botones de símbolo. */
+  compact?: boolean;
 }
 
-export function BusQrPanel({ busDocId, busId, qrGenerated, unidad, empresaName }: BusQrPanelProps) {
+export function BusQrPanel({
+  busDocId,
+  busId,
+  qrGenerated,
+  unidad,
+  empresaName,
+  compact = false,
+}: BusQrPanelProps) {
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -124,6 +136,55 @@ export function BusQrPanel({ busDocId, busId, qrGenerated, unidad, empresaName }
     } finally {
       setDownloading(false);
     }
+  }
+
+  if (compact) {
+    return (
+      <div className={styles.compact}>
+        {qrGenerated ? (
+          qrDataUrl ? (
+            <img src={qrDataUrl} alt={`QR de ${busId}`} className={styles.compactQr} />
+          ) : (
+            <div className={styles.compactQr} />
+          )
+        ) : (
+          <button
+            type="button"
+            className={`${styles.compactQr} ${styles.compactQrPlaceholder}`}
+            onClick={handleGenerate}
+            disabled={generating}
+            title="Generar QR"
+            aria-label="Generar QR"
+          >
+            <Icon name="qr_code_2" size={COMPACT_ICON_SIZE} />
+          </button>
+        )}
+
+        {qrGenerated && (
+          <button
+            type="button"
+            className={`${styles.iconButton} ${styles.iconDownload}`}
+            onClick={handleDownload}
+            disabled={downloading}
+            title="Descargar QR"
+            aria-label="Descargar QR"
+          >
+            <Icon name="download" size={COMPACT_ICON_SIZE} />
+          </button>
+        )}
+
+        <button
+          type="button"
+          className={`${styles.iconButton} ${styles.iconDelete}`}
+          onClick={handleDelete}
+          disabled={deleting}
+          title="Eliminar unidad"
+          aria-label="Eliminar unidad"
+        >
+          <Icon name="delete" size={COMPACT_ICON_SIZE} />
+        </button>
+      </div>
+    );
   }
 
   return (

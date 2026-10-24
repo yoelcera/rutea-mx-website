@@ -1,0 +1,243 @@
+.panel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+.group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.groupTitle {
+  margin-top: 8px;
+  padding-left: 4px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.section {
+  width: 100%;
+  padding: 16px 20px;
+  border: 1px solid var(--color-fill-3);
+  border-radius: 32px;
+}
+
+.nested {
+  border-radius: 24px;
+  padding: 12px 16px;
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summaryTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.chevron {
+  display: inline-block;
+  font-size: 20px;
+  line-height: 1;
+  transition: transform 0.15s ease-in-out;
+}
+
+.section[open] > .summary .chevron {
+  transform: rotate(90deg);
+}
+
+.count {
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--color-fill-3);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.sectionBody {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--color-fill-3);
+  border-radius: 20px;
+}
+
+.rowInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 220px;
+}
+
+.rowTitle {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.rowMeta {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.activeButton {
+  box-shadow: 0 0 0 2px var(--color-text-primary);
+}
+
+.activeButton:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+.unitRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--color-fill-3);
+  border-radius: 20px;
+}
+
+/* Status: solo fondo de color, sin borde */
+.statusTag {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 20px; /* todas las pastillas de estado miden 20px */
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: none;
+  background-color: var(--color-fill-2);
+  color: var(--color-text-primary);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+.tagApproved {
+  background-color: var(--color-accent-green);
+  color: #ffffff;
+}
+
+.tagPending {
+  background-color: var(--color-accent-yellow);
+  color: #000000;
+}
+
+.tagRevoked {
+  background-color: var(--color-accent-red);
+  color: #ffffff;
+}
+
+.masterTag {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background-color: var(--color-accent-brand);
+  color: var(--color-text-accent-brand);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.empty {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+/* Círculo del mismo alto que .statusTag (20px), mismo fondo y sin borde */
+.statusSelect {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--color-fill-2);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: opacity 0.1s ease-in-out;
+}
+
+.statusSelect:hover {
+  opacity: 0.7;
+}
+
+.statusSelectInput {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.statusSelectInput:disabled {
+  cursor: not-allowed;
+}
+
+@media (max-width: 700px) {
+  .section {
+    padding: 14px 16px;
+  }
+
+  .row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .unitRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

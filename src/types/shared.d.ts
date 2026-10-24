@@ -44,6 +44,7 @@ export type ThemeColorKey =
   | "accent-brand"
   | "accent-orange"
   | "accent-green"
+  | "accent-yellow"
   | "accent-red"
   | "accent-blue"
   | "accent-indigo"

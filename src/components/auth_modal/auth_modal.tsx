@@ -14,7 +14,7 @@ const EXTRA_EMPRESAS = [
   { empresa: "uabc", name: "UABC", mobilityType: MobilityType.Bike },
 ];
 
-const EMPRESA_OPTIONS = [
+export const EMPRESA_OPTIONS = [
   ...TRANSIT_OPERATORS.map((operator) => ({
     empresa: getEmpresaByOperatorSlug(operator.slug),
     name: operator.name,

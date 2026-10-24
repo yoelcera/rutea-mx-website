@@ -34,6 +34,7 @@ interface AdminAuthContextValue {
   empresa: string | null;
   mobilityType: MobilityType;
   status: AdminStatus;
+  isMaster: boolean;
   loading: boolean;
   signIn: (correo: string, password: string) => Promise<void>;
   signUp: (input: SignUpInput) => Promise<void>;
@@ -45,6 +46,7 @@ const AdminAuthContext = createContext<AdminAuthContextValue | null>(null);
 export function AdminAuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [status, setStatus] = useState<AdminStatus>("none");
+  const [isMaster, setIsMaster] = useState(false);
   const [nombre, setNombre] = useState<string | null>(null);
   const [empresa, setEmpresa] = useState<string | null>(null);
   const [mobilityType, setMobilityType] = useState<MobilityType>(MobilityType.Bus);
@@ -61,6 +63,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
 
       if (!firebaseUser) {
         setStatus("none");
+        setIsMaster(false);
         setNombre(null);
         setEmpresa(null);
         setMobilityType(MobilityType.Bus);
@@ -70,8 +73,21 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
 
       const snapshot = await getDoc(doc(db, "admins", firebaseUser.uid));
       const data = snapshot.data();
-      setStatus((data?.status as AdminStatus) ?? "none");
       setNombre((data?.nombre as string) ?? null);
+
+      // 1) Primero: ¿es cuenta maestra? Si sí, entra directo, sin revisar empresa ni status.
+      if (data?.master === true) {
+        setIsMaster(true);
+        setStatus("approved");
+        setEmpresa(null);
+        setMobilityType(MobilityType.Bus);
+        setLoading(false);
+        return;
+      }
+
+      // 2) Si no, lo de siempre
+      setIsMaster(false);
+      setStatus((data?.status as AdminStatus) ?? "none");
       setEmpresa((data?.empresa as string) ?? null);
       setMobilityType(
         data?.mobility_type === MobilityType.Bike ? MobilityType.Bike : MobilityType.Bus
@@ -105,7 +121,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AdminAuthContext.Provider
-      value={{ user, nombre, empresa, mobilityType, status, loading, signIn, signUp, signOut }}
+      value={{ user, nombre, empresa, mobilityType, status, isMaster, loading, signIn, signUp, signOut }}
     >
       {children}
     </AdminAuthContext.Provider>
