@@ -15,14 +15,12 @@ import { useAdminAuth } from "@/hooks/use_admin_auth";
 import { isBusActive } from "@/hooks/use_live_buses";
 import {
   hasActiveBikeRide,
-  useMasterAdmins,
-  useMasterBikes,
-  useMasterBuses,
   useStaleTick,
   type MasterAdmin,
   type MasterBike,
   type MasterBus,
 } from "@/hooks/use_master_data";
+import { useMasterAdmins, useMasterBikes, useMasterBuses } from "@/hooks/use_master_store";
 import { db } from "@/lib/firebase";
 import gateStyles from "@/components/admin_gate/admin_gate.module.css";
 import styles from "./master_panel.module.css";
@@ -62,7 +60,7 @@ function empresaName(empresa: string | null): string {
   return EMPRESA_OPTIONS.find((option) => option.empresa === empresa)?.name ?? empresa ?? "—";
 }
 
-/** "—" mientras la lista no se ha abierto nunca; si no, el número. */
+/** "—" mientras carga; si no, el número. */
 function countLabel(list: unknown[] | null, value?: number): string {
   if (list === null) return "—";
   return String(value ?? list.length);
@@ -299,11 +297,14 @@ function BikeRow({ bike, showEmpresa = false }: { bike: MasterBike; showEmpresa?
 
 function ActiveDriversSection() {
   const [open, setOpen] = useState(false);
-  const buses = useMasterBuses(open, { onlyApproved: true });
+  const buses = useMasterBuses(open);
   const bikes = useMasterBikes(open);
   useStaleTick();
 
-  const drivers = buses?.filter((bus) => Boolean(bus.driverId) && isBusActive(bus)) ?? [];
+  const drivers =
+    buses?.filter(
+      (bus) => bus.status === "approved" && Boolean(bus.driverId) && isBusActive(bus)
+    ) ?? [];
   const riders = bikes?.filter(hasActiveBikeRide) ?? [];
   const loaded = buses === null || bikes === null ? null : [...drivers, ...riders];
 
@@ -336,11 +337,13 @@ function ActiveDriversSection() {
 
 function PassengersSection() {
   const [open, setOpen] = useState(false);
-  const buses = useMasterBuses(open, { onlyApproved: true });
+  const buses = useMasterBuses(open);
   useStaleTick();
 
   const withPassengers =
-    buses?.filter((bus) => isBusActive(bus) && bus.passengersCount > 0) ?? null;
+    buses?.filter(
+      (bus) => bus.status === "approved" && isBusActive(bus) && bus.passengersCount > 0
+    ) ?? null;
   const total = withPassengers?.reduce((sum, bus) => sum + bus.passengersCount, 0);
 
   return (
@@ -388,9 +391,12 @@ function EmpresaSection({ option, parentOpen }: { option: EmpresaOption; parentO
   const isBike = option.mobilityType === MobilityType.Bike;
   // Solo lee si esta empresa Y la lista "Empresas" están abiertas
   const reading = open && parentOpen;
-  const buses = useMasterBuses(reading && !isBike, { empresa: option.empresa });
-  const bikes = useMasterBikes(reading && isBike, option.empresa);
-  const admins = useMasterAdmins(reading, option.empresa);
+  const allBuses = useMasterBuses(reading && !isBike);
+  const allBikes = useMasterBikes(reading && isBike);
+  const allAdmins = useMasterAdmins(reading);
+  const buses = allBuses?.filter((bus) => bus.empresa === option.empresa) ?? null;
+  const bikes = allBikes?.filter((bike) => bike.operator === option.empresa) ?? null;
+  const admins = allAdmins?.filter((admin) => admin.empresa === option.empresa) ?? null;
   const units = isBike ? bikes : buses;
 
   const count =
@@ -493,13 +499,14 @@ function AllBikesSection({ visible }: { visible: boolean }) {
 function MasterMap() {
   const [showBuses, setShowBuses] = useState(true);
   const [showBikes, setShowBikes] = useState(true);
-  const buses = useMasterBuses(showBuses, { onlyApproved: true });
+  const buses = useMasterBuses(showBuses);
   const bikes = useMasterBikes(showBikes);
   useStaleTick();
+  const approvedBuses = buses?.filter((bus) => bus.status === "approved") ?? [];
 
   return (
     <MasterMapMapKit
-      buses={buses ?? []}
+      buses={approvedBuses}
       bikes={bikes ?? []}
       showBuses={showBuses}
       showBikes={showBikes}

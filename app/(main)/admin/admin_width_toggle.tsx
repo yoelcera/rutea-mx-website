@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { Icon } from "@/components/icon/icon";
 import { useAdminAuth } from "@/hooks/use_admin_auth";
+import { useMasterStore } from "@/hooks/use_master_store";
 import { RegisterBikeModal } from "@/components/register_bike_modal/register_bike_modal";
 import { RegisterBusModal } from "@/components/register_bus_modal/register_bus_modal";
 import { MobilityType } from "@/data/routes";
@@ -11,6 +13,7 @@ export function AdminWidthToggle({ children }: { children: React.ReactNode }) {
   const [isWide, setIsWide] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const { status, isMaster, empresa, mobilityType, signOut } = useAdminAuth();
+  const { listenersOn, setListenersOn } = useMasterStore();
 
   function renderRegisterModal() {
     const close = () => setShowRegisterModal(false);
@@ -36,6 +39,19 @@ export function AdminWidthToggle({ children }: { children: React.ReactNode }) {
                 onClick={signOut}
               >
                 Cerrar sesión
+              </button>
+            )}
+
+            {isMaster && (
+              <button
+                type="button"
+                className={`${styles.toggleButton} ${styles.iconButton}`}
+                onClick={() => setListenersOn((prev) => !prev)}
+                aria-pressed={listenersOn}
+                title={listenersOn ? "Listeners activos" : "Listeners solo con secciones abiertas"}
+              >
+                Listeners
+                <Icon name={listenersOn ? "check" : "close"} size={18} />
               </button>
             )}
 

@@ -1,20 +1,11 @@
 "use client";
 
-import {
-  collection,
-  onSnapshot,
-  query,
-  where,
-  type DocumentData,
-  type Query,
-  type QueryDocumentSnapshot,
-} from "firebase/firestore";
+import type { QueryDocumentSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { BikeStatus } from "@/data/bike_types";
 import { MobilityType } from "@/data/route_types";
 import type { AdminStatus } from "@/hooks/use_admin_auth";
 import type { LiveBus } from "@/hooks/use_live_buses";
-import { db } from "@/lib/firebase";
 
 /** Igual que en use_live_bikes: sin ubicación nueva en 3 min, el ride se considera caído. */
 const STALE_RIDE_MINUTES = 3;
@@ -53,7 +44,7 @@ function toDate(raw: unknown): Date | null {
 
 const byNumber = (a: string, b: string) => a.localeCompare(b, undefined, { numeric: true });
 
-function parseAdmin(docSnap: QueryDocumentSnapshot): MasterAdmin {
+export function parseAdmin(docSnap: QueryDocumentSnapshot): MasterAdmin {
   const data = docSnap.data();
   return {
     id: docSnap.id,
@@ -65,7 +56,7 @@ function parseAdmin(docSnap: QueryDocumentSnapshot): MasterAdmin {
   };
 }
 
-function parseBus(docSnap: QueryDocumentSnapshot): MasterBus {
+export function parseBus(docSnap: QueryDocumentSnapshot): MasterBus {
   const data = docSnap.data();
   const location = data.driver_location as { latitude: number; longitude: number } | undefined;
   return {
@@ -86,7 +77,7 @@ function parseBus(docSnap: QueryDocumentSnapshot): MasterBus {
   };
 }
 
-function parseBike(docSnap: QueryDocumentSnapshot): MasterBike {
+export function parseBike(docSnap: QueryDocumentSnapshot): MasterBike {
   const data = docSnap.data();
   const location = data.rider_location as { latitude: number; longitude: number } | null | undefined;
   const status = Object.values(BikeStatus).includes(data.status as BikeStatus)
@@ -105,83 +96,9 @@ function parseBike(docSnap: QueryDocumentSnapshot): MasterBike {
   };
 }
 
-/**
- * Escucha `buildQuery()` en tiempo real SOLO mientras `open` sea true.
- * Al cerrarse se desuscribe (cero lecturas) y conserva lo último que leyó.
- * `null` = todavía no se ha leído nunca.
- */
-function useLazySnapshot<T>(
-  open: boolean,
-  key: string,
-  buildQuery: () => Query<DocumentData> | null,
-  parse: (docSnap: QueryDocumentSnapshot) => T,
-  sort: (a: T, b: T) => number
-): T[] | null {
-  const [data, setData] = useState<T[] | null>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    const q = buildQuery();
-    if (!q) return;
-
-    return onSnapshot(q, (snapshot) => {
-      setData(snapshot.docs.map(parse).sort(sort));
-    });
-    // `key` describe la consulta; buildQuery/parse/sort son estables por uso.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, key]);
-
-  return data;
-}
-
-/** Admins (todos, o solo los de `empresa`). */
-export function useMasterAdmins(open: boolean, empresa?: string) {
-  return useLazySnapshot(
-    open,
-    `admins:${empresa ?? "*"}`,
-    () => {
-      if (!db) return null;
-      const ref = collection(db, "admins");
-      return empresa ? query(ref, where("empresa", "==", empresa)) : ref;
-    },
-    parseAdmin,
-    (a, b) => a.nombre.localeCompare(b.nombre)
-  );
-}
-
-/** Buses (todos, solo de `empresa`, y/o solo los "approved"). */
-export function useMasterBuses(open: boolean, options: { empresa?: string; onlyApproved?: boolean } = {}) {
-  const { empresa, onlyApproved = false } = options;
-  return useLazySnapshot(
-    open,
-    `buses:${empresa ?? "*"}:${onlyApproved}`,
-    () => {
-      if (!db) return null;
-      const filters = [
-        ...(empresa ? [where("empresa", "==", empresa)] : []),
-        ...(onlyApproved ? [where("status", "==", "approved")] : []),
-      ];
-      return query(collection(db, "buses"), ...filters);
-    },
-    parseBus,
-    (a, b) => byNumber(a.unidad, b.unidad)
-  );
-}
-
-/** Bicis (todas, o solo las de `empresa`). */
-export function useMasterBikes(open: boolean, empresa?: string) {
-  return useLazySnapshot(
-    open,
-    `bikes:${empresa ?? "*"}`,
-    () => {
-      if (!db) return null;
-      const ref = collection(db, "bikes");
-      return empresa ? query(ref, where("operator", "==", empresa)) : ref;
-    },
-    parseBike,
-    (a, b) => byNumber(a.number, b.number)
-  );
-}
+export const sortAdmins = (a: MasterAdmin, b: MasterAdmin) => a.nombre.localeCompare(b.nombre);
+export const sortBuses = (a: MasterBus, b: MasterBus) => byNumber(a.unidad, b.unidad);
+export const sortBikes = (a: MasterBike, b: MasterBike) => byNumber(a.number, b.number);
 
 /** Re-render local cada 30 s (sin lecturas) para que lo viejo deje de contar como activo. */
 export function useStaleTick() {

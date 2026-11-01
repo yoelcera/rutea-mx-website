@@ -45,6 +45,8 @@ export const MATERIAL_SYMBOLS = [
   "download",
   "delete",
   "expand_more",
+  "check",
+  "close",
 ] as const;
 
 // Neutral

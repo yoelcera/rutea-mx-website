@@ -46,6 +46,12 @@
   font-weight: 500;
 }
 
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
 @media (max-width: 700px) {
   .header {
     flex-direction: column;
