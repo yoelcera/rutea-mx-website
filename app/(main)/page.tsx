@@ -38,6 +38,12 @@ export default function Page() {
             media={
               <Hero.Image
                 src="/hero_section_ss.png"
+                srcset={[
+                  {
+                    src: "/hero_section_ss_dark.png",
+                    theme: "dark",
+                  },
+                ]}
                 alt=""
                 bezel="iPhone Air Light Gold"
               />
@@ -74,6 +80,12 @@ export default function Page() {
           media={
             <Hero.Image
               src="/hero_section_ss.png"
+              srcset={[
+                {
+                  src: "/hero_section_ss_dark.png",
+                  theme: "dark",
+                },
+              ]}
               bezel="iPhone Air Light Gold"
               alt=""
             />
@@ -134,6 +146,12 @@ export default function Page() {
             media={
               <CardGrid.StackedCard.Image
                 src="/expanded_design.png"
+                srcset={[
+                  {
+                    src: "/expanded_design_dark.png",
+                    theme: "dark",
+                  },
+                ]}
                 alt="Make sure to provide an image description for accessibility purposes"
                 bezel="iPhone Air Sky Blue"
                 bezelCrop={{ edge: "bottom", croppedRatio: 0.25 }}
@@ -157,7 +175,27 @@ export default function Page() {
           /> */}
 
           <CardGrid.StackedCard
-            maxWidth="full"
+            maxWidth="twoThirds"
+            title="Filtro de empresas"
+            description="Escoge las empresas de tu preferencia con un filtro de alta calidad visual y distintivo."
+            media={
+              <CardGrid.StackedCard.Image
+                src="/filter_view.png"
+                srcset={[
+                  {
+                    src: "/filter_view_dark.png",
+                    theme: "dark",
+                  },
+                ]}
+                alt="Make sure to provide an image description for accessibility purposes"
+                bezel="iPhone 17 Black"
+              />
+            }
+            textAlignment="leading"
+          />
+
+          <CardGrid.StackedCard
+            maxWidth="third"
             title="Rutas Dinámicas"
             description="No busques más, selecciona un lugar y rutea te hará un trayecto con las rutas de transporte público necesarias, con ascensos y descensos."
             media={
@@ -165,7 +203,7 @@ export default function Page() {
                 src="/dynamic_routes.png"
                 srcset={[
                   {
-                    src: "/dynamic_routes.png",
+                    src: "/dynamic_routes_dark.png",
                     theme: "dark",
                   },
                 ]}
@@ -183,6 +221,12 @@ export default function Page() {
             media={
               <CardGrid.StackedCard.Image
                 src="/profile_view.png"
+                srcset={[
+                  {
+                    src: "/profile_view_dark.png",
+                    theme: "dark",
+                  },
+                ]}
                 bezel="iPhone Air Sky Blue"
                 bezelCrop={{ edge: "bottom", croppedRatio: 0.5 }}
                 alt=""
@@ -199,6 +243,12 @@ export default function Page() {
             media={
               <CardGrid.StackedCard.Image
                 src="/compact_design.png"
+                srcset={[
+                  {
+                    src: "/compact_design_dark.png",
+                    theme: "dark",
+                  },
+                ]}
                 bezel="iPhone Air Space Black"
                 bezelCrop={{ edge: "top", croppedRatio: 0.5 }}
                 alt=""
