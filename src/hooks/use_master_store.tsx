@@ -12,6 +12,7 @@ import {
   type SetStateAction,
 } from "react";
 import { useAdminAuth } from "@/hooks/use_admin_auth";
+import { useBackfillBusImis } from "@/hooks/use_backfill_bus_imis";
 import {
   parseAdmin,
   parseBike,
@@ -113,6 +114,9 @@ export function MasterStoreProvider({ children }: { children: ReactNode }) {
     parseAdmin,
     sortAdmins
   );
+
+  // Buses sin IMI: se les genera y guarda automático
+  useBackfillBusImis(buses);
 
   return (
     <MasterStoreContext.Provider

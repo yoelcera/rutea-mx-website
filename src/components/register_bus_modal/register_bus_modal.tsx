@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { GeoPoint, collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { getOperatorSlugByEmpresa, getRoutesByOperator } from "@/data/routes";
 import { db } from "@/lib/firebase";
+import { buildBusImi } from "@/lib/imi";
 import styles from "./register_bus_modal.module.css";
 
 interface RegisterBusModalProps {
@@ -21,6 +22,9 @@ export function RegisterBusModal({ empresa, onClose }: RegisterBusModalProps) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Vista previa del IMI (se guarda al registrar)
+  const previewImi = empresa && unidad.trim() ? buildBusImi(empresa, unidad) : null;
+
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     setError(null);
@@ -35,6 +39,7 @@ export function RegisterBusModal({ empresa, onClose }: RegisterBusModalProps) {
       const busRef = doc(collection(db, "buses"));
       await setDoc(busRef, {
         bus_id: busRef.id,
+        imi: buildBusImi(empresa, unidad),
         driver_id: "",
         driver_name: "",
         driver_location: new GeoPoint(0, 0),
@@ -75,6 +80,8 @@ export function RegisterBusModal({ empresa, onClose }: RegisterBusModalProps) {
               onChange={(event) => setUnidad(event.target.value)}
               required
             />
+
+            {previewImi && <p className={styles.imiPreview}>IMI: {previewImi}</p>}
 
             <input
               className={styles.input}

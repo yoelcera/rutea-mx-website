@@ -68,6 +68,7 @@ export function parseBus(docSnap: QueryDocumentSnapshot): MasterBus {
     driverId: (data.driver_id as string) || null,
     driverName: (data.driver_name as string) ?? "",
     unidad: (data.unidad as string) ?? "",
+    imi: (data.imi as string) ?? "",
     plate: (data.plate as string) ?? "",
     passengersCount: (data.passengers_count as number) ?? 0,
     updatedAt: toDate(data.updated_at),

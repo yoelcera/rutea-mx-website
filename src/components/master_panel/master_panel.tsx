@@ -22,6 +22,7 @@ import {
 } from "@/hooks/use_master_data";
 import { useMasterAdmins, useMasterBikes, useMasterBuses } from "@/hooks/use_master_store";
 import { db } from "@/lib/firebase";
+import { buildBusImi } from "@/lib/imi";
 import gateStyles from "@/components/admin_gate/admin_gate.module.css";
 import styles from "./master_panel.module.css";
 
@@ -209,6 +210,7 @@ function BusRow({ bus, showEmpresa = false }: { bus: MasterBus; showEmpresa?: bo
           Unidad {bus.unidad || "—"}
           <StatusTag status={bus.status} />
         </p>
+        <p className={styles.rowMeta}>IMI: {bus.imi || buildBusImi(bus.empresa, bus.unidad)}</p>
         <p className={styles.rowMeta}>
           {showEmpresa && `${empresaName(bus.empresa)} · `}
           Placas: {bus.plate || "—"} · Ruta: {routeName(bus.routeId)} · Chofer:{" "}

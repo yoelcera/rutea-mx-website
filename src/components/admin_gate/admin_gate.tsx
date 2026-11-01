@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { AuthModal } from "@/components/auth_modal/auth_modal";
 import { BusMapMapKit } from "@/components/bus_map_mapkit/bus_map_mapkit";
 import {
@@ -17,11 +17,13 @@ import { BikeQrPanel } from "@/components/bike_qr_panel/bike_qr_panel";
 import { BusQrPanel } from "@/components/bus_qr_panel/bus_qr_panel";
 import { MasterPanel } from "@/components/master_panel/master_panel";
 import { useAdminAuth } from "@/hooks/use_admin_auth";
+import { useBackfillBusImis } from "@/hooks/use_backfill_bus_imis";
 import { useLinkedBikesCount } from "@/hooks/use_linked_bikes_count";
 import { BikeMapMapKit } from "@/components/bike_map_mapkit/bike_map_mapkit";
 import { hasActiveRide, useLiveBikes } from "@/hooks/use_live_bikes";
 import { isBusActive, useLiveBuses } from "@/hooks/use_live_buses";
 import { isFirebaseConfigured } from "@/lib/firebase";
+import { buildBusImi } from "@/lib/imi";
 import styles from "./admin_gate.module.css";
 
 const DEFAULT_CHIP_COLOR = "#000000";
@@ -47,6 +49,12 @@ function AdminGateInner() {
   const [selectedBusId, setSelectedBusId] = useState<string | null>(null);
   const isBike = mobilityType === MobilityType.Bike;
   const buses = useLiveBuses(isBike ? null : empresa);
+  // Buses sin IMI: se les genera y guarda automático
+  const busesForImi = useMemo(
+    () => buses.map((bus) => ({ ...bus, empresa: empresa ?? "" })),
+    [buses, empresa]
+  );
+  useBackfillBusImis(busesForImi);
   const bikes = useLiveBikes(empresa, isBike);
   const totalCyclists = useLinkedBikesCount(empresa, isBike);
 
@@ -175,6 +183,10 @@ function AdminGateInner() {
           <div className={styles.busDetailsInfo}>
             <p className={styles.busDetailRow}>
               <strong>Bus ID:</strong> {selectedBus.busId}
+            </p>
+            <p className={styles.busDetailRow}>
+              <strong>IMI:</strong>{" "}
+              {selectedBus.imi || buildBusImi(empresa ?? "", selectedBus.unidad)}
             </p>
             <p className={styles.busDetailRow}>
               <strong>Placas:</strong> {selectedBus.plate}

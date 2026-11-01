@@ -15,6 +15,7 @@ export interface LiveBus {
   driverId: string | null;
   driverName: string;
   unidad: string;
+  imi: string;
   plate: string;
   passengersCount: number;
   updatedAt: Date | null;
@@ -69,6 +70,7 @@ export function useLiveBuses(empresa: string | null) {
           driverId: (data.driver_id as string) ?? null,
           driverName: (data.driver_name as string) ?? "",
           unidad: (data.unidad as string) ?? "",
+          imi: (data.imi as string) ?? "",
           plate: (data.plate as string) ?? "",
           passengersCount: (data.passengers_count as number) ?? 0,
           updatedAt,
