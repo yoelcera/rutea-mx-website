@@ -25,6 +25,12 @@
   letter-spacing: -0.02em;
 }
 
+.routeSubtitle {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
 .subtitle {
   width: 100%;
   font-size: 16px;

@@ -33,10 +33,63 @@ export type RouteFare = {
 export const FARE_ENSENADA: RouteFare = { general: 15.5, preferente: 15.5 * 0.5 };
 export const FARE_GRATIS: RouteFare = { general: 0, preferente: 0 };
 
+export type StreetType =
+  | "calle" | "avenida" | "boulevard" | "calzada" | "carretera" | "autopista"
+  | "privada" | "callejon" | "andador" | "circuito" | "prolongacion" | "libramiento";
+
+export type ColoniaType =
+  | "colonia" | "fraccionamiento" | "barrio" | "ejido"
+  | "unidadHabitacional" | "residencial" | "zonaCentro";
+
+export type PoiCategory =
+  | "pharmacy" | "movieTheater" | "restaurant" | "store" | "foodMarket" | "park"
+  | "school" | "university" | "hospital" | "cafe" | "bank" | "place";
+
+export type StreetRelation =
+  | "principal" | "cruza" | "paralelo" | "segundoParalelo" | "lugar";
+
+export type PlaceType =
+  | { kind: "road"; type: StreetType }
+  | { kind: "neighborhood"; type: ColoniaType }
+  | { kind: "poi"; category: PoiCategory };
+
+export type StreetOrPlace = {
+  name: string;
+  type: PlaceType | null;
+  relation: StreetRelation | null;
+};
+
+export const STREET_TYPE_LABEL: Record<StreetType, string> = {
+  calle: "Calle", avenida: "Avenida", boulevard: "Boulevard", calzada: "Calzada",
+  carretera: "Carretera", autopista: "Autopista", privada: "Privada",
+  callejon: "Callejón", andador: "Andador", circuito: "Circuito",
+  prolongacion: "Prolongación", libramiento: "Libramiento",
+};
+
+export const COLONIA_TYPE_LABEL: Record<ColoniaType, string> = {
+  colonia: "Colonia", fraccionamiento: "Fraccionamiento", barrio: "Barrio",
+  ejido: "Ejido", unidadHabitacional: "Unidad habitacional",
+  residencial: "Residencial", zonaCentro: "Zona centro",
+};
+
+export const POI_CATEGORY_LABEL: Record<PoiCategory, string> = {
+  pharmacy: "Farmacia", movieTheater: "Cine", restaurant: "Restaurante",
+  store: "Tienda", foodMarket: "Mercado", park: "Parque", school: "Escuela",
+  university: "Universidad", hospital: "Hospital", cafe: "Café",
+  bank: "Banco", place: "Lugar",
+};
+
+export const STREET_RELATION_LABEL: Record<StreetRelation, string> = {
+  principal: "Principal", cruza: "Cruza", paralelo: "Paralelo",
+  segundoParalelo: "Segundo paralelo", lugar: "Lugar",
+};
+
 export type TransitRoute = {
   id: string;
   slug: string;
-  name: string;
+  shortTitle: string;
+  longTitle: string | null;
+  subtitle: string | null;
   icon: string;
   color: TransitRouteColor;
   city: string;
@@ -49,6 +102,7 @@ export type TransitRoute = {
   frequencyMinutes: number | null;
   stops: RouteStop[];
   path: LatLngLiteral[];
+  streetsAndPlaces: StreetOrPlace[];
 };
 
 /** 4:30 a. m. / 9:00 p. m. */

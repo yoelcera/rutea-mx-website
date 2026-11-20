@@ -35,7 +35,10 @@ export default async function RoutePage({
         </Link>
 
         <header className={styles.header}>
-          <h1 className={styles.title}>{route.name}</h1>
+          <h1 className={styles.title}>{route.longTitle ?? route.shortTitle}</h1>
+          {route.subtitle && (
+            <p className={styles.routeSubtitle}>{route.subtitle}</p>
+          )}
           <span
             className={styles.operatorChip}
             style={{

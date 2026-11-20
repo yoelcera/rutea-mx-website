@@ -37,7 +37,12 @@ export function RouteCatalog() {
                         color: ROUTE_COLOR_TEXT[route.color],
                       }}
                     >
-                      {route.name}
+                      <span className={styles.routeTitle}>
+                        {route.longTitle ?? route.shortTitle}
+                      </span>
+                      {route.subtitle && (
+                        <span className={styles.routeSubtitle}>{route.subtitle}</span>
+                      )}
                     </Link>
                   ))}
                 </div>

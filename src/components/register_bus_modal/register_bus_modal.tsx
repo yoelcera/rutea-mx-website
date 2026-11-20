@@ -101,7 +101,7 @@ export function RegisterBusModal({ empresa, onClose }: RegisterBusModalProps) {
               >
                 {routes.map((route) => (
                   <option key={route.id} value={route.id}>
-                    {route.name}
+                    {route.shortTitle}
                   </option>
                 ))}
               </select>

@@ -250,7 +250,9 @@ const ensAmpIndecoPath: LatLngLiteral[] = [
 export const ensAmpIndecoRoute: TransitRoute = {
   id: "55E95EE2-9CA5-4E3B-B235-CF50923E2EE9",
   slug: "amp-indeco",
-  name: "Amp. Indeco",
+  shortTitle: "Amp. Indeco",
+  longTitle: null,
+  subtitle: null,
   icon: "amp_indeco",
   color: "rojo",
   city: "ensenada",
@@ -262,6 +264,7 @@ export const ensAmpIndecoRoute: TransitRoute = {
   frequencyMinutes: 22,
   stops: ensAmpIndecoStops,
   path: ensAmpIndecoPath,
+  streetsAndPlaces: [],
 };
 
 // ---- Chapultepec ----
@@ -452,7 +455,9 @@ const ensChapultepecPath: LatLngLiteral[] = [
 export const ensChapultepecRoute: TransitRoute = {
   id: "381BD864-B400-43F0-BD76-43E53E81535A",
   slug: "chapultepec",
-  name: "Chapultepec",
+  shortTitle: "Chapultepec",
+  longTitle: null,
+  subtitle: null,
   icon: "chapultepec",
   color: "rojo",
   city: "ensenada",
@@ -464,6 +469,7 @@ export const ensChapultepecRoute: TransitRoute = {
   frequencyMinutes: 14,
   stops: ensChapultepecStops,
   path: ensChapultepecPath,
+  streetsAndPlaces: [],
 };
 
 // ---- 6to Ayuntamiento ----
@@ -701,7 +707,9 @@ const ens6toAyuntamientoPath: LatLngLiteral[] = [
 export const ens6toAyuntamientoRoute: TransitRoute = {
   id: "49F6EC6B-07B2-4EC1-BA0F-5727AE81886F",
   slug: "6to-ayuntamiento",
-  name: "6to Ayuntamiento",
+  shortTitle: "6to Ayuntamiento",
+  longTitle: null,
+  subtitle: null,
   icon: "6to_ayuntamiento",
   color: "rojo",
   city: "ensenada",
@@ -713,6 +721,7 @@ export const ens6toAyuntamientoRoute: TransitRoute = {
   frequencyMinutes: 35,
   stops: ens6toAyuntamientoStops,
   path: ens6toAyuntamientoPath,
+  streetsAndPlaces: [],
 };
 
 // ---- Popular Juarez ----
@@ -1312,7 +1321,9 @@ const ensPopularJuarezPath: LatLngLiteral[] = [
 export const ensPopularJuarezRoute: TransitRoute = {
   id: "A70FF41C-8D06-46EF-903A-AAEBAA982FE3",
   slug: "popular-juarez",
-  name: "Popular Juarez",
+  shortTitle: "Popular Juarez",
+  longTitle: null,
+  subtitle: null,
   icon: "pcentro_juarez",
   color: "rojo",
   city: "ensenada",
@@ -1324,4 +1335,5 @@ export const ensPopularJuarezRoute: TransitRoute = {
   frequencyMinutes: 14,
   stops: ensPopularJuarezStops,
   path: ensPopularJuarezPath,
+  streetsAndPlaces: [],
 };

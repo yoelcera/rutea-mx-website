@@ -54,7 +54,7 @@ const BIKE_STATUS_OPTIONS = Object.values(BikeStatus).filter(
 );
 
 function routeName(routeId: string): string {
-  return TRANSIT_ROUTES.find((route) => route.id === routeId)?.name ?? (routeId || "—");
+  return TRANSIT_ROUTES.find((route) => route.id === routeId)?.shortTitle ?? (routeId || "—");
 }
 
 function empresaName(empresa: string | null): string {

@@ -9,16 +9,21 @@ import { MobilityType, type TransitRoute, type TransitRouteColor } from "./route
 export * from "./route_types";
 
 import { ensVioleta01Route } from "./ensenada/violeta";
-import { ensAguilas89Route, ensVillas4Route } from "./ensenada/amarillos";
+import {
+  ensAguilas89Route,
+  ensVillas4Route,
+  ensLomasDelSauzalRoute,
+  ensVillas67Route,
+} from "./ensenada/amarillos";
 import {
   ensAmpIndecoRoute,
   ensPopularJuarezRoute,
   ens6toAyuntamientoRoute,
   ensChapultepecRoute,
 } from "./ensenada/rojos";
-import { ensFloresParaisoRoute } from "./ensenada/nativos";
-import { ensEnsSauzalRoute, ensBuenaVistaEnsRoute } from "./ensenada/vigia";
-import { ensEnsSanMiguelRoute, ensEnsBuenaVistaRoute } from "./ensenada/brisa";
+import { ensFloresParaisoRoute, ensBrechasMiradorRoute, ensBufadoraRoute, ensRampaPortalRoute, ensSalitralDurangoParteBajaRoute, ensSanCarlosRoute, ensTinajitasRoute } from "./ensenada/nativos";
+import { ensEnsSauzalRoute, ensBuenaVistaEnsRoute, ensValleDeGpeRoute } from "./ensenada/vigia";
+import { ensEnsSanMiguelRoute, ensEnsBuenaVistaRoute, ensEnsOjosNegrosRoute, ensEnsLaMisionRoute, ensEnsSantaAnitaRoute } from "./ensenada/brisa";
 
 /** Tomado directamente del color dominante de cada ícono de parada. */
 export const ROUTE_COLOR_HEX: Record<TransitRouteColor, string> = {
@@ -72,15 +77,27 @@ export const TRANSIT_ROUTES: TransitRoute[] = [
   ensVioleta01Route,
   ensAguilas89Route,
   ensVillas4Route,
+  ensLomasDelSauzalRoute,
+  ensVillas67Route,
   ensAmpIndecoRoute,
   ensPopularJuarezRoute,
   ens6toAyuntamientoRoute,
   ensChapultepecRoute,
   ensFloresParaisoRoute,
+  ensBrechasMiradorRoute,
+  ensBufadoraRoute,
+  ensRampaPortalRoute,
+  ensSalitralDurangoParteBajaRoute,
+  ensSanCarlosRoute,
+  ensTinajitasRoute,
   ensEnsSauzalRoute,
   ensBuenaVistaEnsRoute,
+  ensValleDeGpeRoute,
   ensEnsSanMiguelRoute,
   ensEnsBuenaVistaRoute,
+  ensEnsOjosNegrosRoute,
+  ensEnsLaMisionRoute,
+  ensEnsSantaAnitaRoute,
 ];
 
 export function getAllRouteSlugs(): string[] {
