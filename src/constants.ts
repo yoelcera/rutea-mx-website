@@ -47,6 +47,10 @@ export const MATERIAL_SYMBOLS = [
   "expand_more",
   "check",
   "close",
+  "add",
+  "directions_walk",
+  "share",
+  "polyline",
 ] as const;
 
 // Neutral

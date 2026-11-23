@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   getOperatorSlugByEmpresa,
   getRoutesByOperator,
@@ -12,9 +12,14 @@ import { useTheme } from "@/hooks/useTheme";
 import { useMapKitScript } from "@/hooks/use_mapkit_script";
 import { hasAssignedDriver } from "@/hooks/use_live_buses";
 import { hasActiveBikeRide, type MasterBike, type MasterBus } from "@/hooks/use_master_data";
+import { CreateRouteModal } from "@/components/create_route_modal/create_route_modal";
+import { Icon } from "@/components/icon/icon";
+import { RouteDrawMenu } from "@/components/route_draw_menu/route_draw_menu";
+import { useRouteDrawing } from "@/hooks/use_route_drawing";
 import { useRouteOverlays } from "@/hooks/use_route_overlays";
 import { ClearRoutesButton } from "@/components/clear_routes_button/clear_routes_button";
 import { StopsToggleButton } from "@/components/stops_toggle_button/stops_toggle_button";
+import { downloadRouteTxt, shareRouteTxt, type RouteDraft } from "@/lib/route_export";
 import { regionFromPoints } from "@/lib/mapkit_region";
 import busStyles from "@/components/bus_map_mapkit/bus_map_mapkit.module.css";
 import bikeStyles from "@/components/bike_map_mapkit/bike_map_mapkit.module.css";
@@ -224,7 +229,16 @@ export function MasterMapMapKit({
     mapRef.current.padding = new window.mapkit.Padding({ top: 0, right: 0, bottom: 0, left: insetLeft });
   }, [insetLeft, isLoaded]);
 
+  const [showCreate, setShowCreate] = useState(false);
+  const [draft, setDraft] = useState<RouteDraft | null>(null);
   const { stopsVisible, toggleStops } = useRouteOverlays(mapRef, isLoaded, selectedRoutes);
+
+  const { menu, notice, closeMenu, addMarker, addPolylinePoint } = useRouteDrawing(
+    mapRef,
+    isLoaded,
+    draft,
+    setDraft
+  );
 
   let content;
   if (!MAPKIT_TOKEN) {
@@ -268,6 +282,39 @@ export function MasterMapMapKit({
         >
           <span className={`${styles.toggleIcon} ${styles.bikeIcon}`} />
         </button>
+        <div className={styles.createColumn}>
+          <button
+            type="button"
+            className={styles.toggle}
+            aria-label={draft ? "Cerrar creación de ruta" : "Crear ruta"}
+            title={draft ? "Cerrar" : "Crear ruta"}
+            onClick={() => (draft ? setDraft(null) : setShowCreate(true))}
+          >
+            <Icon name={draft ? "close" : "add"} size={22} />
+          </button>
+          {draft && (
+            <>
+              <button
+                type="button"
+                className={styles.toggle}
+                aria-label="Compartir ruta"
+                title="Compartir"
+                onClick={() => shareRouteTxt(draft)}
+              >
+                <Icon name="share" size={20} />
+              </button>
+              <button
+                type="button"
+                className={styles.toggle}
+                aria-label="Descargar ruta"
+                title="Descargar"
+                onClick={() => downloadRouteTxt(draft)}
+              >
+                <Icon name="download" size={20} />
+              </button>
+            </>
+          )}
+        </div>
         {selectedRoutes.length > 0 && (
           <>
             <StopsToggleButton visible={stopsVisible} onClick={toggleStops} className={styles.toggle} />
@@ -275,6 +322,25 @@ export function MasterMapMapKit({
           </>
         )}
       </div>
+      {menu && (
+        <RouteDrawMenu
+          x={menu.x}
+          y={menu.y}
+          onMarker={addMarker}
+          onPolyline={addPolylinePoint}
+          onClose={closeMenu}
+        />
+      )}
+      {notice && <p className={styles.notice}>{notice}</p>}
+      {showCreate && (
+        <CreateRouteModal
+          onClose={() => setShowCreate(false)}
+          onStart={(data) => {
+            setDraft({ ...data, stops: [], polyline: [] });
+            setShowCreate(false);
+          }}
+        />
+      )}
     </div>
   );
 }

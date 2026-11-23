@@ -1,0 +1,23 @@
+.kinds {
+  display: flex;
+  gap: 8px;
+}
+
+.kind {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--color-fill-3);
+  background-color: var(--color-fill-0);
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+.kindActive {
+  background-color: var(--color-accent-brand);
+  color: var(--color-text-accent-brand);
+  border-color: var(--color-accent-brand);
+}

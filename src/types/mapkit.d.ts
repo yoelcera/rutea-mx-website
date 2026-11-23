@@ -85,6 +85,31 @@ declare global {
       showItems(items: Array<Annotation | PolylineOverlay>, options?: MapShowItemsOptions): void;
       setRegionAnimated(region: CoordinateRegion, animated?: boolean): void;
       destroy(): void;
+      addEventListener(
+        type: "single-tap",
+        listener: (event: { pointOnPage: { x: number; y: number } }) => void
+      ): void;
+      removeEventListener(
+        type: "single-tap",
+        listener: (event: { pointOnPage: { x: number; y: number } }) => void
+      ): void;
+      convertPointOnPageToCoordinate(point: { x: number; y: number }): Coordinate;
+    }
+
+    interface DirectionsRoute {
+      path: Coordinate[][];
+      polyline?: { points: Coordinate[] };
+    }
+
+    interface DirectionsResponse {
+      routes: DirectionsRoute[];
+    }
+
+    interface Directions {
+      route(
+        request: { origin: Coordinate; destination: Coordinate; transportType?: string },
+        callback: (error: Error | null, response: DirectionsResponse) => void
+      ): void;
     }
 
     interface MapKitNamespace {
@@ -97,6 +122,9 @@ declare global {
       PolylineOverlay: new (points: Coordinate[], options?: { style?: Style }) => PolylineOverlay;
       Style: new (options?: StyleOptions) => Style;
       Padding: new (options?: PaddingOptions) => Padding;
+      Directions: (new () => Directions) & {
+        Transport: { Automobile: string; Walking: string };
+      };
       ColorScheme: { Light: "light"; Dark: "dark"; Adaptive: "adaptive" };
     }
   }
