@@ -1,7 +1,5 @@
-import type { LatLngLiteral, RouteStop, StreetOrPlace, TransitRoute } from "../route_types";
-import { FARE_ENSENADA } from "../route_types";
-
-// ---- Ruta Violeta ----
+import type { LatLngLiteral, RouteStop, StreetOrPlace, TransitRoute } from "../../route_types";
+import { FARE_ENSENADA } from "../../route_types";
 
 const ensVioleta01Stops: RouteStop[] = [
   { label: "Inicio/Fin", isTerminal: true, lat: 31.80856, lng: -116.59619 },
