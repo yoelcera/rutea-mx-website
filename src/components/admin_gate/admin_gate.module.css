@@ -76,6 +76,7 @@
 }
 
 .busDetails {
+  flex-wrap: wrap;
   display: flex;
   flex-direction: row;
   align-items: flex-start;

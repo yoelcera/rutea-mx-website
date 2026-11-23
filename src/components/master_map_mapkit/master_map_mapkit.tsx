@@ -72,7 +72,9 @@ interface MasterMapProps {
   showBikes: boolean;
   onToggleBuses: () => void;
   onToggleBikes: () => void;
-  height?: number;
+  height?: number | string;
+  /** Píxeles tapados por el panel flotante (lado izquierdo). */
+  insetLeft?: number;
 }
 
 /** Mapa de la cuenta maestra: buses con chofer + bicis en ride, de todas las empresas. */
@@ -83,7 +85,8 @@ export function MasterMapMapKit({
   showBikes,
   onToggleBuses,
   onToggleBikes,
-  height = 420,
+  height = 700,
+  insetLeft = 0,
 }: MasterMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapKitJS.Map | null>(null);
@@ -204,6 +207,12 @@ export function MasterMapMapKit({
       markers.clear();
     };
   }, []);
+
+  // Área segura: el panel flotante de admin tapa la izquierda del mapa
+  useEffect(() => {
+    if (!mapRef.current || !window.mapkit) return;
+    mapRef.current.padding = new window.mapkit.Padding({ top: 0, right: 0, bottom: 0, left: insetLeft });
+  }, [insetLeft, isLoaded]);
 
   let content;
   if (!MAPKIT_TOKEN) {

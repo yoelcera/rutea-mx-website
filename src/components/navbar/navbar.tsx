@@ -6,7 +6,7 @@ import styles from "./navbar.module.css";
 interface NavbarProps {
   icon: React.ReactNode;
   appName: string;
-  links?: { label: string; href: string; external?: boolean }[];
+  links?: { label: string; href: string; external?: boolean; dropdown?: string[] }[];
   action: React.ReactNode;
 }
 
@@ -35,6 +35,20 @@ export function Navbar({ icon, appName, links, action }: NavbarProps) {
                       <a href={href}>{link.label}</a>
                     ) : (
                       <Link href={href}>{link.label}</Link>
+                    )}
+
+                    {link.dropdown && (
+                      <ul className={styles.dropdown} aria-hidden="true">
+                        {link.dropdown.map((item, i) => (
+                          <li
+                            key={item}
+                            className={styles.dropdownItem}
+                            style={{ "--i": i } as React.CSSProperties}
+                          >
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
                     )}
                   </li>
                 );

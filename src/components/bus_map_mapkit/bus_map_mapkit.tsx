@@ -15,10 +15,12 @@ const DEFAULT_CENTER = { lat: 31.86, lng: -116.6 };
 interface BusMapProps {
   empresa: string;
   buses: LiveBus[];
-  height?: number;
+  height?: number | string;
+  /** Píxeles tapados por el panel flotante (lado izquierdo). */
+  insetLeft?: number;
 }
 
-export function BusMapMapKit({ empresa, buses, height = 420 }: BusMapProps) {
+export function BusMapMapKit({ empresa, buses, height = 700, insetLeft = 0 }: BusMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapKitJS.Map | null>(null);
   const markersRef = useRef<Map<string, MapKitJS.Annotation>>(new Map());
@@ -135,6 +137,12 @@ export function BusMapMapKit({ empresa, buses, height = 420 }: BusMapProps) {
       markers.clear();
     };
   }, []);
+
+  // Área segura: el panel flotante de admin tapa la izquierda del mapa
+  useEffect(() => {
+    if (!mapRef.current || !window.mapkit) return;
+    mapRef.current.padding = new window.mapkit.Padding({ top: 0, right: 0, bottom: 0, left: insetLeft });
+  }, [insetLeft, isLoaded]);
 
   if (!MAPKIT_TOKEN) {
     return (

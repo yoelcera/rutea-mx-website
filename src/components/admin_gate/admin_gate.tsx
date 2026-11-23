@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { AdminMapStage } from "@/components/admin_map_stage/admin_map_stage";
 import { AuthModal } from "@/components/auth_modal/auth_modal";
 import { BusMapMapKit } from "@/components/bus_map_mapkit/bus_map_mapkit";
 import {
@@ -115,131 +116,138 @@ function AdminGateInner() {
   const selectedBike = isBike ? bikes.find((bike) => bike.id === selectedBusId) ?? null : null;
 
   return (
-    <div className={`${styles.gate} ${styles.messageBlock}`}>
-      <div className={styles.statsRow}>
-        <p className={styles.message}>
-          Bienvenido{firstName ? `, ${firstName}` : ""}.
-        </p>
-        <p className={styles.message}>Empresa: {operator?.name ?? empresa}</p>
-        {isBike ? (
-          <p className={styles.message}>Ciclistas totales: {totalCyclists}</p>
-        ) : (
-          <>
-            <p className={styles.message}>Choferes activos: {activeDrivers}</p>
-            <p className={styles.message}>Pasajeros totales: {totalPassengers}</p>
-          </>
-        )}
-      </div>
-      <div className={styles.busRosterRow}>
-        <p className={styles.message}>{MOBILITY_ROSTER_LABEL[mobilityType]}</p>
-        <div className={styles.busRoster}>
-        {isBike
-          ? bikes.map((bike) => (
-              <button
-                key={bike.id}
-                type="button"
-                className={
-                  selectedBusId === bike.id
-                    ? `${styles.busChip} ${styles.busChipSelected}`
-                    : styles.busChip
-                }
-                style={
-                  hasActiveRide(bike)
-                    ? { backgroundColor: chipColor, color: chipTextColor }
-                    : undefined
-                }
-                onClick={() =>
-                  setSelectedBusId((prev) => (prev === bike.id ? null : bike.id))
-                }
-              >
-                {bike.number}
-              </button>
-            ))
-          : buses.map((bus) => (
-          <button
-            key={bus.id}
-            type="button"
-            className={
-              selectedBusId === bus.id
-                ? `${styles.busChip} ${styles.busChipSelected}`
-                : styles.busChip
-            }
-            style={
-              bus.driverName.trim()
-                ? { backgroundColor: chipColor, color: chipTextColor }
-                : undefined
-            }
-            onClick={() =>
-              setSelectedBusId((prev) => (prev === bus.id ? null : bus.id))
-            }
-          >
-            {bus.unidad}
-          </button>
-        ))}
-        </div>
-      </div>
-      {selectedBus && (
-        <div className={styles.busDetails}>
-          <div className={styles.busDetailsInfo}>
-            <p className={styles.busDetailRow}>
-              <strong>Bus ID:</strong> {selectedBus.busId}
-            </p>
-            <p className={styles.busDetailRow}>
-              <strong>IMI:</strong>{" "}
-              {selectedBus.imi || buildBusImi(empresa ?? "", selectedBus.unidad)}
-            </p>
-            <p className={styles.busDetailRow}>
-              <strong>Placas:</strong> {selectedBus.plate}
-            </p>
-            <p className={styles.busDetailRow}>
-              <strong>Conductor:</strong> {selectedBus.driverName}
-            </p>
-            <p className={styles.busDetailRow}>
-              <strong>Ubicación:</strong>{" "}
-              {selectedBus.lat !== null && selectedBus.lng !== null
-                ? `${selectedBus.lat.toFixed(5)}, ${selectedBus.lng.toFixed(5)}`
-                : "—"}
-            </p>
-            <p className={styles.busDetailRow}>
-              <strong>Actualizado:</strong>{" "}
-              {selectedBus.updatedAt ? selectedBus.updatedAt.toLocaleString("es-MX") : "—"}
-            </p>
-            <p className={styles.busDetailRow}>
-              <strong>Ruta ID:</strong> {selectedBus.routeId}
-            </p>
-            <p className={styles.busDetailRow}>
-              <strong>Pasajeros:</strong> {selectedBus.passengersCount}
-            </p>
-          </div>
+    <AdminMapStage
+      renderMap={(insetLeft) =>
+        empresa ? (
+          isBike ? (
+            <BikeMapMapKit empresa={empresa} bikes={bikes} insetLeft={insetLeft} />
+          ) : (
+            <BusMapMapKit empresa={empresa} buses={buses} insetLeft={insetLeft} />
+          )
+        ) : null
+      }
+      panel={
+        <>
+              <div className={styles.statsRow}>
+                <p className={styles.message}>
+                  Bienvenido{firstName ? `, ${firstName}` : ""}.
+                </p>
+                <p className={styles.message}>Empresa: {operator?.name ?? empresa}</p>
+                {isBike ? (
+                  <p className={styles.message}>Ciclistas totales: {totalCyclists}</p>
+                ) : (
+                  <>
+                    <p className={styles.message}>Choferes activos: {activeDrivers}</p>
+                    <p className={styles.message}>Pasajeros totales: {totalPassengers}</p>
+                  </>
+                )}
+              </div>
+              <div className={styles.busRosterRow}>
+                <p className={styles.message}>{MOBILITY_ROSTER_LABEL[mobilityType]}</p>
+                <div className={styles.busRoster}>
+                {isBike
+                  ? bikes.map((bike) => (
+                      <button
+                        key={bike.id}
+                        type="button"
+                        className={
+                          selectedBusId === bike.id
+                            ? `${styles.busChip} ${styles.busChipSelected}`
+                            : styles.busChip
+                        }
+                        style={
+                          hasActiveRide(bike)
+                            ? { backgroundColor: chipColor, color: chipTextColor }
+                            : undefined
+                        }
+                        onClick={() =>
+                          setSelectedBusId((prev) => (prev === bike.id ? null : bike.id))
+                        }
+                      >
+                        {bike.number}
+                      </button>
+                    ))
+                  : buses.map((bus) => (
+                  <button
+                    key={bus.id}
+                    type="button"
+                    className={
+                      selectedBusId === bus.id
+                        ? `${styles.busChip} ${styles.busChipSelected}`
+                        : styles.busChip
+                    }
+                    style={
+                      bus.driverName.trim()
+                        ? { backgroundColor: chipColor, color: chipTextColor }
+                        : undefined
+                    }
+                    onClick={() =>
+                      setSelectedBusId((prev) => (prev === bus.id ? null : bus.id))
+                    }
+                  >
+                    {bus.unidad}
+                  </button>
+                ))}
+                </div>
+              </div>
+              {selectedBus && (
+                <div className={styles.busDetails}>
+                  <div className={styles.busDetailsInfo}>
+                    <p className={styles.busDetailRow}>
+                      <strong>Bus ID:</strong> {selectedBus.busId}
+                    </p>
+                    <p className={styles.busDetailRow}>
+                      <strong>IMI:</strong>{" "}
+                      {selectedBus.imi || buildBusImi(empresa ?? "", selectedBus.unidad)}
+                    </p>
+                    <p className={styles.busDetailRow}>
+                      <strong>Placas:</strong> {selectedBus.plate}
+                    </p>
+                    <p className={styles.busDetailRow}>
+                      <strong>Conductor:</strong> {selectedBus.driverName}
+                    </p>
+                    <p className={styles.busDetailRow}>
+                      <strong>Ubicación:</strong>{" "}
+                      {selectedBus.lat !== null && selectedBus.lng !== null
+                        ? `${selectedBus.lat.toFixed(5)}, ${selectedBus.lng.toFixed(5)}`
+                        : "—"}
+                    </p>
+                    <p className={styles.busDetailRow}>
+                      <strong>Actualizado:</strong>{" "}
+                      {selectedBus.updatedAt ? selectedBus.updatedAt.toLocaleString("es-MX") : "—"}
+                    </p>
+                    <p className={styles.busDetailRow}>
+                      <strong>Ruta ID:</strong> {selectedBus.routeId}
+                    </p>
+                    <p className={styles.busDetailRow}>
+                      <strong>Pasajeros:</strong> {selectedBus.passengersCount}
+                    </p>
+                  </div>
 
-          <BusQrPanel
-            busDocId={selectedBus.id}
-            busId={selectedBus.busId}
-            qrGenerated={selectedBus.qrGenerated}
-            unidad={selectedBus.unidad}
-            empresaName={operator?.name ?? empresa ?? ""}
-          />
-        </div>
-      )}
-      {selectedBike && (
-        <div className={styles.busDetails}>
-          <BikeDetails key={selectedBike.id} bike={selectedBike} />
+                  <BusQrPanel
+                    busDocId={selectedBus.id}
+                    busId={selectedBus.busId}
+                    qrGenerated={selectedBus.qrGenerated}
+                    unidad={selectedBus.unidad}
+                    empresaName={operator?.name ?? empresa ?? ""}
+                  />
+                </div>
+              )}
+              {selectedBike && (
+                <div className={styles.busDetails}>
+                  <BikeDetails key={selectedBike.id} bike={selectedBike} />
 
-          <BikeQrPanel
-            bikeId={selectedBike.id}
-            qrGenerated={selectedBike.qr_generated}
-            number={selectedBike.number}
-            empresa={empresa ?? ""}
-            empresaName={operator?.name ?? empresa ?? ""}
-          />
-        </div>
-      )}
-      {empresa &&
-        (isBike ? (
-          <BikeMapMapKit empresa={empresa} bikes={bikes} />
-        ) : (
-          <BusMapMapKit empresa={empresa} buses={buses} />
-        ))}
-    </div>
+                  <BikeQrPanel
+                    bikeId={selectedBike.id}
+                    qrGenerated={selectedBike.qr_generated}
+                    number={selectedBike.number}
+                    empresa={empresa ?? ""}
+                    empresaName={operator?.name ?? empresa ?? ""}
+                  />
+                </div>
+              )}
+        </>
+      }
+    />
   );
 }

@@ -3,6 +3,7 @@
 import { useState, type ReactNode } from "react";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { EMPRESA_OPTIONS } from "@/components/auth_modal/auth_modal";
+import { AdminMapStage } from "@/components/admin_map_stage/admin_map_stage";
 import { BikeQrPanel } from "@/components/bike_qr_panel/bike_qr_panel";
 import { BusQrPanel } from "@/components/bus_qr_panel/bus_qr_panel";
 import { Icon } from "@/components/icon/icon";
@@ -497,8 +498,8 @@ function AllBikesSection({ visible }: { visible: boolean }) {
   );
 }
 
-/** Solo existe mientras el mapa está visible. Cada botón apaga la lectura de su tipo. */
-function MasterMap() {
+/** Siempre visible. Cada botón apaga la lectura de su tipo. */
+function MasterMap({ insetLeft }: { insetLeft: number }) {
   const [showBuses, setShowBuses] = useState(true);
   const [showBikes, setShowBikes] = useState(true);
   const buses = useMasterBuses(showBuses);
@@ -512,6 +513,7 @@ function MasterMap() {
       bikes={bikes ?? []}
       showBuses={showBuses}
       showBikes={showBikes}
+      insetLeft={insetLeft}
       onToggleBuses={() => setShowBuses((prev) => !prev)}
       onToggleBikes={() => setShowBikes((prev) => !prev)}
     />
@@ -524,38 +526,28 @@ function MasterMap() {
 
 export function MasterPanel() {
   const { user, nombre } = useAdminAuth();
-  const [showMap, setShowMap] = useState(false);
   const firstName = nombre?.trim().split(/\s+/)[0];
 
   return (
-    <div className={`${gateStyles.gate} ${gateStyles.messageBlock}`}>
-      <div className={gateStyles.statsRow}>
-        <p className={gateStyles.message}>Bienvenido{firstName ? `, ${firstName}` : ""}.</p>
-        <p className={gateStyles.message}>Cuenta maestra</p>
-      </div>
+    <AdminMapStage
+      renderMap={(insetLeft) => <MasterMap insetLeft={insetLeft} />}
+      panel={
+        <>
+          <div className={gateStyles.statsRow}>
+            <p className={gateStyles.message}>Bienvenido{firstName ? `, ${firstName}` : ""}.</p>
+            <p className={gateStyles.message}>Cuenta maestra</p>
+          </div>
 
-      <div className={styles.panel}>
-        <ActiveDriversSection />
-        <PassengersSection />
-        <AdminsSection selfUid={user?.uid} />
-        <EmpresasSection />
-      </div>
-
-      <button
-        type="button"
-        className={gateStyles.signOutButton}
-        onClick={() => setShowMap((prev) => !prev)}
-      >
-        {showMap ? "Ocultar mapa" : "Mostrar mapa"}
-      </button>
-
-      {showMap && <MasterMap />}
-
-      {/* Se quedan montadas (ocultas) para conservar lo último leído; con el mapa oculto no leen */}
-      <div className={styles.panel} hidden={!showMap}>
-        <AllBusesSection visible={showMap} />
-        <AllBikesSection visible={showMap} />
-      </div>
-    </div>
+          <div className={styles.panel}>
+            <ActiveDriversSection />
+            <PassengersSection />
+            <AdminsSection selfUid={user?.uid} />
+            <EmpresasSection />
+            <AllBusesSection visible />
+            <AllBikesSection visible />
+          </div>
+        </>
+      }
+    />
   );
 }

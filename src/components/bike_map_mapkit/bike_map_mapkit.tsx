@@ -22,10 +22,12 @@ function isRiding(bike: LiveBike): bike is RidingBike {
 interface BikeMapProps {
   empresa: string;
   bikes: LiveBike[];
-  height?: number;
+  height?: number | string;
+  /** Píxeles tapados por el panel flotante (lado izquierdo). */
+  insetLeft?: number;
 }
 
-export function BikeMapMapKit({ empresa, bikes, height = 420 }: BikeMapProps) {
+export function BikeMapMapKit({ empresa, bikes, height = 700, insetLeft = 0 }: BikeMapProps) {
   const map_container_ref = useRef<HTMLDivElement>(null);
   const map_ref = useRef<MapKitJS.Map | null>(null);
   const markers_ref = useRef<Map<string, MapKitJS.Annotation>>(new Map());
@@ -140,6 +142,12 @@ export function BikeMapMapKit({ empresa, bikes, height = 420 }: BikeMapProps) {
       markers.clear();
     };
   }, []);
+
+  // Área segura: el panel flotante de admin tapa la izquierda del mapa
+  useEffect(() => {
+    if (!map_ref.current || !window.mapkit) return;
+    map_ref.current.padding = new window.mapkit.Padding({ top: 0, right: 0, bottom: 0, left: insetLeft });
+  }, [insetLeft, isLoaded]);
 
   if (!MAPKIT_TOKEN) {
     return (

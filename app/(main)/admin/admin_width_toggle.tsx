@@ -7,6 +7,7 @@ import { useMasterStore } from "@/hooks/use_master_store";
 import { RegisterBikeModal } from "@/components/register_bike_modal/register_bike_modal";
 import { RegisterBusModal } from "@/components/register_bus_modal/register_bus_modal";
 import { MobilityType } from "@/data/routes";
+import { useAdminPanel } from "@/hooks/use_admin_panel";
 import styles from "./admin_width_toggle.module.css";
 
 export function AdminWidthToggle({ children }: { children: React.ReactNode }) {
@@ -14,6 +15,7 @@ export function AdminWidthToggle({ children }: { children: React.ReactNode }) {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const { status, isMaster, empresa, mobilityType, signOut } = useAdminAuth();
   const { listenersOn, setListenersOn } = useMasterStore();
+  const { open, toggle } = useAdminPanel();
 
   function renderRegisterModal() {
     const close = () => setShowRegisterModal(false);
@@ -30,7 +32,22 @@ export function AdminWidthToggle({ children }: { children: React.ReactNode }) {
     <div className={styles.outer}>
       <div className={isWide ? styles.wide : styles.narrow}>
         <div className={styles.header}>
-          <h2 className={styles.title}>Panel de Administrador</h2>
+          <div className={styles.titleGroup}>
+            {(status === "approved" || isMaster) && (
+              <button
+                type="button"
+                className={styles.menuButton}
+                onClick={toggle}
+                aria-expanded={open}
+                aria-label={open ? "Cerrar panel" : "Abrir panel"}
+              >
+                <span />
+                <span />
+                <span />
+              </button>
+            )}
+            <h2 className={styles.title}>Panel de Administrador</h2>
+          </div>
           <div className={styles.buttonRow}>
             {status === "approved" && (
               <button

@@ -62,8 +62,18 @@ declare global {
       isRotationEnabled?: boolean;
     }
 
+    interface PaddingOptions {
+      top?: number;
+      right?: number;
+      bottom?: number;
+      left?: number;
+    }
+
+    interface Padding extends PaddingOptions {}
+
     interface Map {
       colorScheme: ColorSchemeValue;
+      padding: Padding;
       region: CoordinateRegion;
       element: HTMLElement;
       addAnnotation(annotation: Annotation): Annotation;
@@ -86,6 +96,7 @@ declare global {
       ) => Annotation;
       PolylineOverlay: new (points: Coordinate[], options?: { style?: Style }) => PolylineOverlay;
       Style: new (options?: StyleOptions) => Style;
+      Padding: new (options?: PaddingOptions) => Padding;
       ColorScheme: { Light: "light"; Dark: "dark"; Adaptive: "adaptive" };
     }
   }

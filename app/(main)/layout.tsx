@@ -7,6 +7,7 @@ import { DownloadActionButton } from "@/components/download_action_button/downlo
 import { MaterialSymbolsLink } from "@/components/material_symbols_link/material_symbols_link";
 import { Navbar } from "@/components/navbar/navbar";
 import { ThemeStyle } from "@/components/theme_style/theme_style";
+import { TRANSIT_OPERATORS, TRANSIT_ROUTES } from "@/data/routes";
 import "@/global.css";
 import { ThemeProvider } from "@/providers/theme_provider";
 
@@ -84,7 +85,16 @@ export default function RootLayout({
               appName="Rutea MX"
               links={[
                 { label: "Funcionalidades", href: "#features" },
-                { label: "Rutas", href: "#routes" },
+                {
+                  label: `Rutas ( ${TRANSIT_ROUTES.length} )`,
+                  href: "#routes",
+                  dropdown: TRANSIT_OPERATORS.map((op) => {
+                    const count = TRANSIT_ROUTES.filter(
+                      (r) => r.operatorSlug === op.slug,
+                    ).length;
+                    return `${op.name} ( ${count} )`;
+                  }),
+                },
                 // Uncomment the line below once you're ready to start using Release Notes
                 // { label: "Release Notes", href: "/release-notes" },
               ]}
