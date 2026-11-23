@@ -119,7 +119,7 @@ export function useRouteDrawing(
     setMenu(null);
   }, [menu, setDraft]);
 
-  const addPolylinePoint = useCallback(() => {
+  const addPolylinePoint = useCallback(async () => {
     if (!menu || !window.mapkit || !draft) return;
     const target = menu.coord;
     const previous = waypointsRef.current[waypointsRef.current.length - 1];
@@ -129,39 +129,38 @@ export function useRouteDrawing(
     if (!previous) return; // primer punto: solo queda como inicio, sin marker
 
     const { mapkit } = window;
-    new mapkit.Directions().route(
-      {
+    try {
+      const response = await new mapkit.Directions().route({
         origin: { latitude: previous.lat, longitude: previous.lng },
         destination: { latitude: target.lat, longitude: target.lng },
         transportType:
           draft.kind === "walk"
             ? mapkit.Directions.Transport.Walking
             : mapkit.Directions.Transport.Automobile,
-      },
-      (error, response) => {
-        const route = response?.routes?.[0];
-        if (error || !route) {
-          console.error("Directions:", error);
-          waypointsRef.current = waypointsRef.current.filter((point) => point !== target);
-          setNotice(`No se encontró ruta por calle${error?.message ? `: ${error.message}` : "."}`);
-          setTimeout(() => setNotice(null), 4000);
-          return;
-        }
+      });
 
-        const raw = route.path?.flat() ?? route.polyline?.points ?? [];
-        const coords = raw.map((c) => ({ lat: c.latitude, lng: c.longitude }));
-        setDraft((prev) => {
-          if (!prev) return prev;
-          const last = prev.polyline[prev.polyline.length - 1];
-          const repeatsLast =
-            last && coords[0] && last.lat === coords[0].lat && last.lng === coords[0].lng;
-          return {
-            ...prev,
-            polyline: [...prev.polyline, ...(repeatsLast ? coords.slice(1) : coords)],
-          };
-        });
-      }
-    );
+      const route = response.routes[0];
+      const raw = route?.polyline?.points ?? route?.path?.flat() ?? [];
+      if (raw.length === 0) throw new Error("La ruta llegó vacía.");
+
+      const coords = raw.map((c) => ({ lat: c.latitude, lng: c.longitude }));
+      setDraft((prev) => {
+        if (!prev) return prev;
+        const last = prev.polyline[prev.polyline.length - 1];
+        const repeatsLast =
+          last && coords[0] && last.lat === coords[0].lat && last.lng === coords[0].lng;
+        return {
+          ...prev,
+          polyline: [...prev.polyline, ...(repeatsLast ? coords.slice(1) : coords)],
+        };
+      });
+    } catch (error) {
+      console.error("Directions:", error);
+      waypointsRef.current = waypointsRef.current.filter((point) => point !== target);
+      const reason = error instanceof Error && error.message ? `: ${error.message}` : ".";
+      setNotice(`No se encontró ruta por calle${reason}`);
+      setTimeout(() => setNotice(null), 4000);
+    }
   }, [menu, draft, setDraft]);
 
   return { menu, notice, closeMenu, addMarker, addPolylinePoint };

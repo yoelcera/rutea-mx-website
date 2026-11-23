@@ -26,7 +26,7 @@ function loadMapKit(token: string, language: string): Promise<void> {
     script.crossOrigin = "anonymous";
     script.async = true;
     script.dataset.callback = callbackName;
-    script.dataset.libraries = "map,overlays,annotations";
+    script.dataset.libraries = "map,overlays,annotations,services";
     script.dataset.token = token;
     script.dataset.language = language;
     script.onerror = () => reject(new Error("No se pudo cargar MapKit JS."));

@@ -97,8 +97,8 @@ declare global {
     }
 
     interface DirectionsRoute {
-      path: Coordinate[][];
-      polyline?: { points: Coordinate[] };
+      polyline: { points: Coordinate[] };
+      path?: Coordinate[][]; // obsoleto
     }
 
     interface DirectionsResponse {
@@ -106,10 +106,11 @@ declare global {
     }
 
     interface Directions {
-      route(
-        request: { origin: Coordinate; destination: Coordinate; transportType?: string },
-        callback: (error: Error | null, response: DirectionsResponse) => void
-      ): void;
+      route(request: {
+        origin: Coordinate;
+        destination: Coordinate;
+        transportType?: string;
+      }): Promise<DirectionsResponse>;
     }
 
     interface MapKitNamespace {
