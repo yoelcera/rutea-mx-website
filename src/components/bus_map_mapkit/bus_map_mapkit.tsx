@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { getOperatorSlugByEmpresa, getRoutesByOperator, ROUTE_COLOR_HEX } from "@/data/routes";
+import { getOperatorSlugByEmpresa, getRoutesByOperator, ROUTE_COLOR_HEX, type TransitRoute } from "@/data/routes";
+import { useRouteOverlays } from "@/hooks/use_route_overlays";
+import { ClearRoutesButton } from "@/components/clear_routes_button/clear_routes_button";
+import { StopsToggleButton } from "@/components/stops_toggle_button/stops_toggle_button";
 import { useTheme } from "@/hooks/useTheme";
 import { useMapKitScript } from "@/hooks/use_mapkit_script";
 import { hasAssignedDriver, type LiveBus } from "@/hooks/use_live_buses";
@@ -18,9 +21,13 @@ interface BusMapProps {
   height?: number | string;
   /** Píxeles tapados por el panel flotante (lado izquierdo). */
   insetLeft?: number;
+  /** Rutas elegidas en el panel: se dibujan con su polyline y paradas. */
+  selectedRoutes?: TransitRoute[];
+  /** Quita todas las rutas seleccionadas. */
+  onClearRoutes?: () => void;
 }
 
-export function BusMapMapKit({ empresa, buses, height = 700, insetLeft = 0 }: BusMapProps) {
+export function BusMapMapKit({ empresa, buses, height = 720, insetLeft = 0, selectedRoutes = [], onClearRoutes }: BusMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapKitJS.Map | null>(null);
   const markersRef = useRef<Map<string, MapKitJS.Annotation>>(new Map());
@@ -144,6 +151,8 @@ export function BusMapMapKit({ empresa, buses, height = 700, insetLeft = 0 }: Bu
     mapRef.current.padding = new window.mapkit.Padding({ top: 0, right: 0, bottom: 0, left: insetLeft });
   }, [insetLeft, isLoaded]);
 
+  const { stopsVisible, toggleStops } = useRouteOverlays(mapRef, isLoaded, selectedRoutes);
+
   if (!MAPKIT_TOKEN) {
     return (
       <div className={styles.placeholder} style={{ height }}>
@@ -160,5 +169,15 @@ export function BusMapMapKit({ empresa, buses, height = 700, insetLeft = 0 }: Bu
     );
   }
 
-  return <div ref={mapContainerRef} className={styles.map} style={{ height }} />;
+  return (
+    <div style={{ position: "relative" }}>
+      <div ref={mapContainerRef} className={styles.map} style={{ height }} />
+      {selectedRoutes.length > 0 && (
+        <>
+          <StopsToggleButton visible={stopsVisible} onClick={toggleStops} />
+          {onClearRoutes && <ClearRoutesButton onClick={onClearRoutes} />}
+        </>
+      )}
+    </div>
+  );
 }

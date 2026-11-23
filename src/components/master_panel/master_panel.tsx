@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { EMPRESA_OPTIONS } from "@/components/auth_modal/auth_modal";
 import { AdminMapStage } from "@/components/admin_map_stage/admin_map_stage";
@@ -8,10 +8,11 @@ import { BikeQrPanel } from "@/components/bike_qr_panel/bike_qr_panel";
 import { BusQrPanel } from "@/components/bus_qr_panel/bus_qr_panel";
 import { Icon } from "@/components/icon/icon";
 import { MasterMapMapKit } from "@/components/master_map_mapkit/master_map_mapkit";
+import { RouteSelectList } from "@/components/route_select_list/route_select_list";
 import { RegisterBikeModal } from "@/components/register_bike_modal/register_bike_modal";
 import { RegisterBusModal } from "@/components/register_bus_modal/register_bus_modal";
 import { BIKE_STATUS_LABEL, BikeStatus } from "@/data/bike_types";
-import { MobilityType, TRANSIT_ROUTES } from "@/data/routes";
+import { MobilityType, TRANSIT_ROUTES, type TransitRoute } from "@/data/routes";
 import { useAdminAuth } from "@/hooks/use_admin_auth";
 import { isBusActive } from "@/hooks/use_live_buses";
 import {
@@ -388,6 +389,26 @@ function AdminsSection({ selfUid }: { selfUid: string | undefined }) {
   );
 }
 
+function RoutesSection({
+  selected,
+  onToggle,
+}: {
+  selected: Set<string>;
+  onToggle: (routeId: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const count =
+    selected.size > 0
+      ? `${selected.size} / ${TRANSIT_ROUTES.length}`
+      : String(TRANSIT_ROUTES.length);
+
+  return (
+    <Section title="Rutas" count={count} open={open} onToggle={setOpen}>
+      <RouteSelectList routes={TRANSIT_ROUTES} selected={selected} onToggle={onToggle} />
+    </Section>
+  );
+}
+
 function EmpresaSection({ option, parentOpen }: { option: EmpresaOption; parentOpen: boolean }) {
   const [open, setOpen] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
@@ -499,7 +520,15 @@ function AllBikesSection({ visible }: { visible: boolean }) {
 }
 
 /** Siempre visible. Cada botón apaga la lectura de su tipo. */
-function MasterMap({ insetLeft }: { insetLeft: number }) {
+function MasterMap({
+  insetLeft,
+  selectedRoutes,
+  onClearRoutes,
+}: {
+  insetLeft: number;
+  selectedRoutes: TransitRoute[];
+  onClearRoutes: () => void;
+}) {
   const [showBuses, setShowBuses] = useState(true);
   const [showBikes, setShowBikes] = useState(true);
   const buses = useMasterBuses(showBuses);
@@ -514,6 +543,8 @@ function MasterMap({ insetLeft }: { insetLeft: number }) {
       showBuses={showBuses}
       showBikes={showBikes}
       insetLeft={insetLeft}
+      selectedRoutes={selectedRoutes}
+      onClearRoutes={onClearRoutes}
       onToggleBuses={() => setShowBuses((prev) => !prev)}
       onToggleBikes={() => setShowBikes((prev) => !prev)}
     />
@@ -527,10 +558,30 @@ function MasterMap({ insetLeft }: { insetLeft: number }) {
 export function MasterPanel() {
   const { user, nombre } = useAdminAuth();
   const firstName = nombre?.trim().split(/\s+/)[0];
+  const [selectedRouteIds, setSelectedRouteIds] = useState<Set<string>>(new Set());
+  const selectedRoutes = useMemo(
+    () => TRANSIT_ROUTES.filter((route) => selectedRouteIds.has(route.id)),
+    [selectedRouteIds]
+  );
+
+  function toggleRoute(routeId: string) {
+    setSelectedRouteIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(routeId)) next.delete(routeId);
+      else next.add(routeId);
+      return next;
+    });
+  }
 
   return (
     <AdminMapStage
-      renderMap={(insetLeft) => <MasterMap insetLeft={insetLeft} />}
+      renderMap={(insetLeft) => (
+        <MasterMap
+          insetLeft={insetLeft}
+          selectedRoutes={selectedRoutes}
+          onClearRoutes={() => setSelectedRouteIds(new Set())}
+        />
+      )}
       panel={
         <>
           <div className={gateStyles.statsRow}>
@@ -542,6 +593,7 @@ export function MasterPanel() {
             <ActiveDriversSection />
             <PassengersSection />
             <AdminsSection selfUid={user?.uid} />
+            <RoutesSection selected={selectedRouteIds} onToggle={toggleRoute} />
             <EmpresasSection />
             <AllBusesSection visible />
             <AllBikesSection visible />

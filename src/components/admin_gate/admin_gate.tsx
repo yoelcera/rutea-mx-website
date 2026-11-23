@@ -13,6 +13,7 @@ import {
   ROUTE_COLOR_HEX,
   ROUTE_COLOR_TEXT,
 } from "@/data/routes";
+import { RouteSelectList } from "@/components/route_select_list/route_select_list";
 import { BikeDetails } from "@/components/bike_details/bike_details";
 import { BikeQrPanel } from "@/components/bike_qr_panel/bike_qr_panel";
 import { BusQrPanel } from "@/components/bus_qr_panel/bus_qr_panel";
@@ -48,6 +49,7 @@ function AdminGateInner() {
   const { user, nombre, empresa, mobilityType, status, isMaster, loading, signOut } = useAdminAuth();
   const [showModal, setShowModal] = useState(false);
   const [selectedBusId, setSelectedBusId] = useState<string | null>(null);
+  const [selectedRouteIds, setSelectedRouteIds] = useState<Set<string>>(new Set());
   const isBike = mobilityType === MobilityType.Bike;
   const buses = useLiveBuses(isBike ? null : empresa);
   // Buses sin IMI: se les genera y guarda automático
@@ -108,6 +110,16 @@ function AdminGateInner() {
   const operatorSlug = empresa ? getOperatorSlugByEmpresa(empresa) : undefined;
   const operator = operatorSlug ? getOperatorBySlug(operatorSlug) : undefined;
   const routes = operatorSlug ? getRoutesByOperator(operatorSlug) : [];
+  const selectedRoutes = routes.filter((route) => selectedRouteIds.has(route.id));
+
+  function toggleRoute(routeId: string) {
+    setSelectedRouteIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(routeId)) next.delete(routeId);
+      else next.add(routeId);
+      return next;
+    });
+  }
   const chipColor = routes[0] ? ROUTE_COLOR_HEX[routes[0].color] : DEFAULT_CHIP_COLOR;
   const chipTextColor = routes[0] ? ROUTE_COLOR_TEXT[routes[0].color] : DEFAULT_CHIP_TEXT_COLOR;
   const totalPassengers = buses.filter(isBusActive).reduce((sum, bus) => sum + bus.passengersCount, 0);
@@ -120,9 +132,21 @@ function AdminGateInner() {
       renderMap={(insetLeft) =>
         empresa ? (
           isBike ? (
-            <BikeMapMapKit empresa={empresa} bikes={bikes} insetLeft={insetLeft} />
+            <BikeMapMapKit
+              empresa={empresa}
+              bikes={bikes}
+              insetLeft={insetLeft}
+              selectedRoutes={selectedRoutes}
+              onClearRoutes={() => setSelectedRouteIds(new Set())}
+            />
           ) : (
-            <BusMapMapKit empresa={empresa} buses={buses} insetLeft={insetLeft} />
+            <BusMapMapKit
+              empresa={empresa}
+              buses={buses}
+              insetLeft={insetLeft}
+              selectedRoutes={selectedRoutes}
+              onClearRoutes={() => setSelectedRouteIds(new Set())}
+            />
           )
         ) : null
       }
@@ -190,6 +214,12 @@ function AdminGateInner() {
                 ))}
                 </div>
               </div>
+              {routes.length > 0 && (
+                <div className={styles.routesBlock}>
+                  <p className={styles.message}>Rutas</p>
+                  <RouteSelectList routes={routes} selected={selectedRouteIds} onToggle={toggleRoute} />
+                </div>
+              )}
               {selectedBus && (
                 <div className={styles.busDetails}>
                   <div className={styles.busDetailsInfo}>

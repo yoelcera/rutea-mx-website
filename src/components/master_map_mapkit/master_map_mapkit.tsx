@@ -6,11 +6,15 @@ import {
   getRoutesByOperator,
   ROUTE_COLOR_HEX,
   TRANSIT_ROUTES,
+  type TransitRoute,
 } from "@/data/routes";
 import { useTheme } from "@/hooks/useTheme";
 import { useMapKitScript } from "@/hooks/use_mapkit_script";
 import { hasAssignedDriver } from "@/hooks/use_live_buses";
 import { hasActiveBikeRide, type MasterBike, type MasterBus } from "@/hooks/use_master_data";
+import { useRouteOverlays } from "@/hooks/use_route_overlays";
+import { ClearRoutesButton } from "@/components/clear_routes_button/clear_routes_button";
+import { StopsToggleButton } from "@/components/stops_toggle_button/stops_toggle_button";
 import { regionFromPoints } from "@/lib/mapkit_region";
 import busStyles from "@/components/bus_map_mapkit/bus_map_mapkit.module.css";
 import bikeStyles from "@/components/bike_map_mapkit/bike_map_mapkit.module.css";
@@ -75,6 +79,10 @@ interface MasterMapProps {
   height?: number | string;
   /** Píxeles tapados por el panel flotante (lado izquierdo). */
   insetLeft?: number;
+  /** Rutas elegidas en el panel: se dibujan con su polyline y paradas. */
+  selectedRoutes?: TransitRoute[];
+  /** Quita todas las rutas seleccionadas. */
+  onClearRoutes?: () => void;
 }
 
 /** Mapa de la cuenta maestra: buses con chofer + bicis en ride, de todas las empresas. */
@@ -85,8 +93,10 @@ export function MasterMapMapKit({
   showBikes,
   onToggleBuses,
   onToggleBikes,
-  height = 700,
+  height = 720,
   insetLeft = 0,
+  selectedRoutes = [],
+  onClearRoutes,
 }: MasterMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapKitJS.Map | null>(null);
@@ -214,6 +224,8 @@ export function MasterMapMapKit({
     mapRef.current.padding = new window.mapkit.Padding({ top: 0, right: 0, bottom: 0, left: insetLeft });
   }, [insetLeft, isLoaded]);
 
+  const { stopsVisible, toggleStops } = useRouteOverlays(mapRef, isLoaded, selectedRoutes);
+
   let content;
   if (!MAPKIT_TOKEN) {
     content = (
@@ -256,6 +268,12 @@ export function MasterMapMapKit({
         >
           <span className={`${styles.toggleIcon} ${styles.bikeIcon}`} />
         </button>
+        {selectedRoutes.length > 0 && (
+          <>
+            <StopsToggleButton visible={stopsVisible} onClick={toggleStops} className={styles.toggle} />
+            {onClearRoutes && <ClearRoutesButton onClick={onClearRoutes} className={styles.toggle} />}
+          </>
+        )}
       </div>
     </div>
   );
